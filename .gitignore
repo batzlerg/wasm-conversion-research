@@ -1,0 +1,12 @@
+# Dependencies
+node_modules/
+
+# External libraries
+experiments/pegtl-parser/pegtl/
+
+# Build artifacts
+*.o
+*.a
+
+# OS files
+.DS_Store
