@@ -1,6 +1,14 @@
 # WASM Conversion Prospects
 
-Curated list of C, C++, Rust libraries vetted for WebAssembly conversion. Updated January 2025 after JS alternative analysis.
+**⚠️ This document has been superseded by:**
+- **[ELIMINATED.md](ELIMINATED.md)** — Libraries we won't pursue (with reasons)
+- **[ACTIVE_PROSPECTS.md](ACTIVE_PROSPECTS.md)** — Libraries still under consideration
+
+**Status:** Historical reference. See new docs above for current state.
+
+---
+
+Original curated list of C, C++, Rust libraries vetted for WebAssembly conversion. Updated January 2025 after JS alternative analysis.
 
 ---
 

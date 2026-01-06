@@ -1,15 +1,29 @@
 # WASM Conversion Research - Executive Summary
 
-**Last Updated:** January 2025
-**Status:** Active Research - Pattern Validation Complete
+**Last Updated:** January 2026
+**Status:** Active Research - Documentation Reorganized
+
+---
+
+## Project Organization
+
+This research has been reorganized into focused documents:
+
+- **[ELIMINATED.md](ELIMINATED.md)** — 83 libraries we won't pursue (with reasons why)
+- **[ACTIVE_PROSPECTS.md](ACTIVE_PROSPECTS.md)** — 34 viable candidates (13 completed, 21 remaining)
+- **[LEARNINGS.md](LEARNINGS.md)** — Technical details of all 15 conversion attempts
+- **[EDGE_PROSPECTS.md](EDGE_PROSPECTS.md)** — 20 edge-specific candidates evaluated
+- **[PRODUCT_PROSPECTS.md](PRODUCT_PROSPECTS.md)** — Product ideas leveraging conversions
+- **[CLAUDE.md](CLAUDE.md)** — Decision tree and workflow guide
+- **[products/thumbhash-edge.md](products/thumbhash-edge.md)** — First edge deployment spec
 
 ---
 
 ## Current State
 
-### Completed Conversions: 15 Total
+### Completed Conversions: 13 Successful
 
-**13 Successful** (All documented in LEARNINGS.md):
+**All documented in LEARNINGS.md:**
 1. ✅ blurhash (C) - 21KB, 5,135 decodes/sec
 2. ✅ mathc (C) - 19KB, 33M mat4 ops/sec
 3. ✅ LZ4 (C) - 15.6KB, 6.5 GB/s compression
@@ -24,11 +38,19 @@
 12. ✅ image-rs (Rust) - 785KB, image processing suite
 13. ✅ QOI (C) - 8.9KB, 254-377 MP/s encoding
 
-**2 Eliminated/Deferred:**
+### Eliminated: 4 (Learning Cases)
+
 1. ❌ simdjson (C++) - 30% slower than JSON.parse (SIMD failed)
 2. ❌ jq (C) - 115x slower than JS (interpreter overhead)
-3. ⚠️ tesseract - Use tesseract.js (pre-built exists)
-4. ❌ stc (C) - Skipped via decision tree (V8 native faster)
+3. ❌ stc (C) - Skipped via decision tree (V8 native faster)
+4. ⚠️ tesseract - Use tesseract.js (pre-built exists)
+
+### Total Evaluated: 100+
+
+- **Eliminated:** 83 libraries (see ELIMINATED.md)
+- **Active prospects:** 34 libraries (see ACTIVE_PROSPECTS.md)
+- **Completed:** 13 conversions
+- **Success rate:** 13/13 when decision tree criteria met
 
 ---
 

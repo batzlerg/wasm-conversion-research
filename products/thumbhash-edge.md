@@ -1,28 +1,29 @@
-# blurhash-edge — Blurhash API for Cloudflare Workers
+# thumbhash-edge — Image Placeholder API for Cloudflare Workers
 
-> Zero-dependency blurhash generation running on Cloudflare Workers via WebAssembly.
+> Modern image placeholder generation with alpha channel support, running on Cloudflare Workers via WebAssembly.
 > Open source. Self-host for free. No data leaves the edge.
 
 **Status:** Open Source Project Spec
-**Repository name:** `blurhash-edge`
-**Tagline:** "Self-hosted blurhash API for the edge"
+**Repository name:** `thumbhash-edge`
+**Tagline:** "Self-hosted ThumbHash API for the edge"
 
 ---
 
 ## Table of Contents
 
 1. [Why This Exists](#why-this-exists)
-2. [How It Works](#how-it-works)
-3. [Persona Analysis](#persona-analysis)
-4. [Self-Hosting Guide](#self-hosting-guide)
-5. [API Reference](#api-reference)
-6. [Limits & Pricing Calculator](#limits--pricing-calculator)
-7. [WASM Build Pipeline](#wasm-build-pipeline)
-8. [Integration Examples](#integration-examples)
-9. [Blog Post Draft](#blog-post-draft)
-10. [Portfolio Copy](#portfolio-copy)
-11. [Naming Analysis](#naming-analysis)
-12. [Open Source Strategy](#open-source-strategy)
+2. [ThumbHash vs BlurHash](#thumbhash-vs-blurhash)
+3. [How It Works](#how-it-works)
+4. [Value Proposition](#value-proposition)
+5. [Persona Analysis](#persona-analysis)
+6. [Self-Hosting Guide](#self-hosting-guide)
+7. [API Reference](#api-reference)
+8. [Limits & Pricing Calculator](#limits--pricing-calculator)
+9. [WASM Build Pipeline](#wasm-build-pipeline)
+10. [Integration Examples](#integration-examples)
+11. [Blog Post Draft](#blog-post-draft)
+12. [Portfolio Copy](#portfolio-copy)
+13. [Open Source Strategy](#open-source-strategy)
 
 ---
 
@@ -30,7 +31,7 @@
 
 ### The Problem
 
-Blurhash placeholders improve perceived performance—users see a blurred preview instead of empty space while images load. But generating blurhashes is awkward:
+Image placeholder hashes improve perceived performance—users see a blurred preview instead of empty space while images load. But generating them is awkward:
 
 1. **Build-time generation** requires Node.js + sharp (native dependency hell)
 2. **Server-side generation** needs a running server (not Jamstack-friendly)
@@ -40,11 +41,11 @@ Static site generators, edge-rendered apps, and CDN-first architectures don't ha
 
 ### The Solution
 
-Compile the original C blurhash library to WebAssembly. Deploy it on Cloudflare Workers. Call it from anywhere:
+Compile the ThumbHash library to WebAssembly. Deploy it on Cloudflare Workers. Call it from anywhere:
 
 ```bash
-curl "https://blurhash.example.com/blur?url=https://example.com/photo.jpg"
-# → {"blurhash":"LEHV6nWB2yk8pyo0adR*.7kCMdnj","width":800,"height":600}
+curl "https://thumbhash.example.com/hash?url=https://example.com/photo.jpg"
+# → {"thumbhash":"1QcSHQRnh493V4dIh4eXh1h4kJUI","width":800,"height":600,"aspectRatio":1.33}
 ```
 
 - No server to maintain
@@ -55,6 +56,81 @@ curl "https://blurhash.example.com/blur?url=https://example.com/photo.jpg"
 
 ---
 
+## ThumbHash vs BlurHash
+
+### Why ThumbHash Instead of BlurHash?
+
+ThumbHash is the **modern evolution** of the placeholder concept, created by Evan Wallace (esbuild author) after analyzing BlurHash's limitations.
+
+| Feature | BlurHash | ThumbHash |
+|---------|----------|-----------|
+| **Alpha channel** | ❌ No | ✅ Yes (transparency) |
+| **Color accuracy** | Good | Better |
+| **Detail retention** | Standard | More detail, same size |
+| **Size** | ~30 bytes | ~30 bytes |
+| **Speed** | Fast | Comparable |
+| **Creator** | Wolt (2018) | Evan Wallace (2023) |
+
+### When to Use Each
+
+**Use ThumbHash if:**
+- Starting a new project (better tech)
+- You need transparency support (PNGs, SVGs)
+- Color accuracy matters (product photos, art)
+
+**Use BlurHash if:**
+- Already integrated and working
+- Existing ecosystem integrations (Mastodon, Discourse)
+- Team is familiar with it
+
+### Ecosystem Status (2026)
+
+- **BlurHash:** Wider adoption, more libraries, battle-tested
+- **ThumbHash:** Newer, technically superior, growing adoption
+
+**Our choice:** ThumbHash for new projects. Better quality, same performance, future-proof.
+
+---
+
+## Value Proposition
+
+### Who Needs This?
+
+**Primary users:**
+- Next.js/Astro/Nuxt developers using Image components
+- Jamstack sites (Netlify, Vercel, Cloudflare Pages)
+- Headless CMS platforms (Contentful, Sanity, Strapi)
+- Static site generators
+
+### What Problems Does This Solve?
+
+1. **No native Next.js support** — `next/image` doesn't generate placeholders by default
+2. **Build-time slowness** — Processing 100s of images during build kills CI/CD
+3. **Dynamic images** — User uploads can't be processed at build time
+4. **Native dependency hell** — sharp requires node-gyp, breaks in Docker/CI
+5. **Vercel doesn't offer this** — Unlike OG images, no platform solution exists
+
+### Competitive Landscape
+
+| Solution | Cost | Setup | Limitations |
+|----------|------|-------|-------------|
+| **sharp at build time** | Free | Complex (native deps) | Slow builds, static only |
+| **Plaiceholder** | Free | npm package | Build-time only, sharp dependency |
+| **Paid CDN services** | $9-29/mo | API key | Data leaves your control |
+| **thumbhash-edge** | **Free** (self-host) | 5min deploy | None |
+
+### Revenue Potential
+
+**For you:** Portfolio piece demonstrating edge computing + WASM mastery
+
+**For users:** Free forever if self-hosted, or could offer:
+- Hosted API: $0 (10k/mo) → $9 (unlimited)
+- Team features: Shared cache, usage analytics
+
+**Honest assessment:** Self-hostable open source is the play. API revenue is hard. This is a **resume/portfolio project** that solves a real problem.
+
+---
+
 ## How It Works
 
 ```
@@ -62,12 +138,12 @@ curl "https://blurhash.example.com/blur?url=https://example.com/photo.jpg"
 │  Your Site   │     │           Cloudflare Edge (nearest POP)         │
 │              │     │                                                 │
 │  <img        │     │  ┌─────────┐   ┌──────────┐   ┌──────────────┐ │
-│   data-blur= │────▶│  │ Worker  │──▶│ Fetch    │──▶│ stb_image    │ │
-│   "LEH..."   │     │  │ Router  │   │ Image    │   │ (WASM decode)│ │
+│   data-thumb=│────▶│  │ Worker  │──▶│ Fetch    │──▶│ stb_image    │ │
+│   "1Qc..."   │     │  │ Router  │   │ Image    │   │ (WASM decode)│ │
 │   src="..."  │     │  └─────────┘   └──────────┘   └──────────────┘ │
 │  />          │◀────│                                      │          │
 │              │     │  ┌─────────┐   ┌──────────────┐     │          │
-└──────────────┘     │  │ Return  │◀──│ blurhash     │◀────┘          │
+└──────────────┘     │  │ Return  │◀──│ thumbhash    │◀────┘          │
                      │  │ JSON    │   │ (WASM encode)│                 │
                      │  └─────────┘   └──────────────┘                 │
                      │                                                 │
@@ -81,9 +157,9 @@ curl "https://blurhash.example.com/blur?url=https://example.com/photo.jpg"
 1. Worker receives request with image URL
 2. Fetches image from origin (runs on same edge node)
 3. Decodes image using stb_image (WASM, ~103KB)
-4. Downsamples to small dimensions for hashing
-5. Generates blurhash using blurhash-c (WASM, ~21KB)
-6. Returns JSON with blurhash + original dimensions
+4. Downsamples to thumbnail size for hashing
+5. Generates thumbhash using thumbhash library (WASM, ~15KB)
+6. Returns JSON with thumbhash + original dimensions + aspect ratio
 7. Optionally caches result in Cloudflare KV
 
 ---
@@ -96,24 +172,25 @@ curl "https://blurhash.example.com/blur?url=https://example.com/photo.jpg"
 
 **Pain points:**
 - Sharp native dependencies break in CI
-- Don't want to run a server just for blurhash
-- Need blurhash at build time for static sites
+- Don't want to run a server just for thumbhash
+- Need thumbhash at build time for static sites
 
-**How blurhash-edge helps:**
-- `npm install blurhash-edge-client` for type-safe API calls
+**How thumbhash-edge helps:**
+- `npm install thumbhash-edge-client` for type-safe API calls
 - One-click deploy to their own Cloudflare account
 - Works in any build pipeline (no native deps)
+- Better quality than blurhash (alpha + color accuracy)
 
 **User flow:**
 ```bash
 # Deploy once (2 minutes)
-git clone https://github.com/your-username/blurhash-edge
-cd blurhash-edge && npm install
+git clone https://github.com/your-username/thumbhash-edge
+cd thumbhash-edge && npm install
 npx wrangler deploy
 
 # Use forever
-import { getBlurHash } from 'blurhash-edge-client';
-const blur = await getBlurHash('https://example.com/photo.jpg');
+import { getThumbHash } from 'thumbhash-edge-client';
+const thumb = await getThumbHash('https://example.com/photo.jpg');
 ```
 
 **What they'd share:** GitHub star, tweet about clean DX, blog post about their setup.
