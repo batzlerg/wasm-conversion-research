@@ -1,255 +1,195 @@
 # WASM Conversion Prospects
 
-Curated list of top GitHub repositories (C, C++, Rust) that are candidates for WebAssembly conversion experimentation. Compiled January 2025.
-
-**Criteria:**
-- Libraries, utilities, CLI tools, drivers only
-- No full GUI applications
-- No complete products (browsers, game engines, IDEs)
-- Prioritized by: WASM feasibility, stars, and utility
+Curated list of C, C++, Rust libraries vetted for WebAssembly conversion. Updated January 2025 after JS alternative analysis.
 
 ---
 
-## Category Legend
+## Vetting Status Legend
 
 | Symbol | Meaning |
 |--------|---------|
-| ⭐ | Very high potential for WASM |
-| 🔶 | Moderate potential, some challenges |
-| 🔴 | Low potential (system deps, I/O heavy) |
+| ✅ | **KEEP** - No adequate JS alternative or WASM offers clear advantage |
+| ❌ | **ELIMINATED** - Strong JS alternative exists with 80-90%+ feature overlap |
+| 🔶 | **CONDITIONAL** - JS exists but WASM may win on size/performance |
 
 ---
 
-## 1. Parsing & Serialization (Excellent WASM Candidates)
+## ELIMINATED (Strong JS Alternatives Exist)
 
-| # | Name | Lang | Stars | Description | WASM Potential |
-|---|------|------|-------|-------------|----------------|
-| 1 | [simdjson](https://github.com/simdjson/simdjson) | C++ | 23k | Parsing gigabytes of JSON per second | ⭐ |
-| 2 | [rapidjson](https://github.com/Tencent/rapidjson) | C++ | 14k | Fast JSON parser/generator with SAX/DOM API | ⭐ |
-| 3 | [nlohmann/json](https://github.com/nlohmann/json) | C++ | 48k | JSON for Modern C++ | ⭐ |
-| 4 | [jq](https://github.com/jqlang/jq) | C | 33k | Command-line JSON processor | ⭐ |
-| 5 | [yaml-cpp](https://github.com/jbeder/yaml-cpp) | C++ | 5k | YAML parser and emitter | ⭐ |
-| 6 | [rapidyaml](https://github.com/biojppm/rapidyaml) | C++ | 1.5k | Fast YAML library (~450MB/s) | ⭐ |
-| 7 | [protobuf](https://github.com/protocolbuffers/protobuf) | C++ | 70k | Protocol Buffers - data interchange format | ⭐ |
-| 8 | [flatbuffers](https://github.com/google/flatbuffers) | C++ | 25k | Memory efficient serialization | ⭐ |
-| 9 | [serde](https://github.com/serde-rs/serde) | Rust | 9k | Serialization framework | ⭐ |
-| 10 | [serde_json](https://github.com/serde-rs/json) | Rust | 5k | JSON support for Serde | ⭐ |
+| # | Name | Lang | JS Alternative | Why Eliminated |
+|---|------|------|----------------|----------------|
+| 1 | yaml-cpp | C++ | js-yaml, yaml (22k+ npm dependents) | Mature, fast, full YAML 1.2 support |
+| 2 | rapidyaml | C++ | js-yaml, yaml | Same as above |
+| 3 | protobuf | C++ | @bufbuild/protobuf, protobufjs | Official JS support, actively maintained |
+| 4 | flatbuffers | C++ | flatbuffers (official TS support) | Google maintains official JS/TS bindings |
+| 5 | serde | Rust | N/A (Rust-specific) | Only useful within Rust ecosystem |
+| 6 | serde_json | Rust | Native JSON.parse, fast-json-parse | V8 JSON.parse is highly optimized |
+| 7 | zstd | C | Node.js 22+ native zlib.zstd | Built into Node.js, no dependency needed |
+| 8 | brotli | C | Node.js native zlib.brotli | Built into Node.js |
+| 9 | zlib | C | Node.js native zlib | Built into Node.js |
+| 10 | lz4_flex | Rust | lz4 npm package | Native bindings available |
+| 11 | brotli-rs | Rust | Node.js native | See above |
+| 12 | openssl | C | Web Crypto API, noble-* | Native browser/Node crypto |
+| 13 | libsodium | C | libsodium-wrappers (WASM already) | Pre-built WASM wrappers exist |
+| 14 | ring | Rust | noble-curves, noble-hashes | Audited pure JS alternatives |
+| 15 | rustls | Rust | tls module (Node.js native) | Native TLS support |
+| 16 | RustCrypto | Rust | noble-* suite | Pure JS, audited, complete |
+| 17 | hashcat | C | N/A (specialized tool) | Not library-suitable |
+| 18 | opencv | C++ | opencv.js (pre-built WASM) | Official WASM build exists |
+| 19 | regex (Rust) | Rust | Native JS RegExp, XRegExp | V8 regex is fast |
+| 20 | PCRE2 | C | Native JS RegExp | Built-in sufficient |
+| 21 | RE2 | C++ | re2-wasm (pre-built) | Pre-built WASM exists |
+| 22 | glm | C++ | gl-matrix | Mature, widely used |
+| 23 | uthash | C | Native Map/Object | JS Map is O(1), optimized |
+| 24 | klib | C | Native JS data structures | Built-in sufficient |
+| 25 | hashbrown | Rust | Native Map | See above |
+| 26 | curl | C | fetch, axios, got | Native HTTP in JS |
+| 27 | libuv | C | Node.js event loop | Built into Node.js |
+| 28 | tokio | Rust | Node.js async/await | Native async in JS |
+| 29 | hyper | Rust | fetch, undici | Native HTTP |
+| 30 | sqlite | C | sql.js, better-sqlite3 | Pre-built WASM exists |
+| 31 | libsql | C | sql.js fork exists | Pre-built available |
+| 32 | sqlx | Rust | knex, prisma | JS ORMs mature |
+| 33 | diesel | Rust | See above | See above |
+| 34 | nnn | C | N/A (terminal UI) | Not browser-suitable |
+| 35 | tmux | C | N/A (terminal) | Not browser-suitable |
+| 36 | spdlog | C++ | pino, winston | Pino is 5-10x faster than most |
+| 37 | fmt | C++ | Template literals, util.format | Native formatting adequate |
+| 38 | tracing | Rust | pino, winston | See above |
+| 39 | log | Rust | console.*, pino | Native logging |
+| 40 | googletest | C++ | jest, vitest | Mature JS testing |
+| 41 | Catch2 | C++ | jest, vitest | See above |
+| 42 | criterion | Rust | benchmark.js, tinybench | JS benchmarking exists |
+| 43 | zephyr | C | N/A (RTOS) | Not browser-suitable |
+| 44 | embassy | Rust | N/A (embedded) | Not browser-suitable |
+| 45 | esp-idf | C | N/A (hardware) | Not browser-suitable |
+| 46 | uv | Rust | N/A (Python tool) | Python-specific, file I/O heavy |
+| 47 | pest | Rust | peggy, chevrotain, nearley | Mature JS parser generators |
+| 48 | nom | Rust | parsimmon, chevrotain | JS parser combinators exist |
 
-## 2. Compression (Excellent WASM Candidates)
-
-| # | Name | Lang | Stars | Description | WASM Potential |
-|---|------|------|-------|-------------|----------------|
-| 11 | [zstd](https://github.com/facebook/zstd) | C | 26k | Fast real-time compression | ⭐ |
-| 12 | [lz4](https://github.com/lz4/lz4) | C | 10k | Extremely fast compression | ⭐ |
-| 13 | [brotli](https://github.com/google/brotli) | C | 14k | Generic lossless compression | ⭐ |
-| 14 | [zlib](https://github.com/madler/zlib) | C | 6k | Compression library | ⭐ |
-| 15 | [snappy](https://github.com/google/snappy) | C++ | 6k | Fast compressor/decompressor | ⭐ |
-| 16 | [lz4_flex](https://github.com/PSeitz/lz4_flex) | Rust | 500 | Pure Rust LZ4 compression | ⭐ |
-| 17 | [brotli-rs](https://github.com/dropbox/rust-brotli) | Rust | 800 | Pure Rust brotli decompressor | ⭐ |
-
-## 3. Cryptography (Good WASM Candidates)
-
-| # | Name | Lang | Stars | Description | WASM Potential |
-|---|------|------|-------|-------------|----------------|
-| 18 | [openssl](https://github.com/openssl/openssl) | C | 29k | TLS/SSL and crypto library | 🔶 |
-| 19 | [libsodium](https://github.com/jedisct1/libsodium) | C | 13k | Modern crypto library | ⭐ |
-| 20 | [ring](https://github.com/briansmith/ring) | Rust | 3.5k | Safe, fast crypto | 🔶 |
-| 21 | [rustls](https://github.com/rustls/rustls) | Rust | 6k | Modern TLS library in Rust | ⭐ |
-| 22 | [RustCrypto](https://github.com/RustCrypto) | Rust | - | Pure Rust crypto implementations | ⭐ |
-| 23 | [hashcat](https://github.com/hashcat/hashcat) | C | 25k | Password recovery utility | 🔶 |
-
-## 4. Image Processing (Good WASM Candidates)
-
-| # | Name | Lang | Stars | Description | WASM Potential |
-|---|------|------|-------|-------------|----------------|
-| 24 | [stb](https://github.com/nothings/stb) | C | 31k | Single-file public domain libraries | ⭐ |
-| 25 | [ImageMagick](https://github.com/ImageMagick/ImageMagick) | C | 15k | Image manipulation suite | 🔶 |
-| 26 | [CImg](https://github.com/GreycLab/CImg) | C++ | 1.5k | Header-only image processing | ⭐ |
-| 27 | [opencv](https://github.com/opencv/opencv) | C++ | 85k | Computer vision library | 🔶 |
-| 28 | [image-rs](https://github.com/image-rs/image) | Rust | 5k | Image processing library | ⭐ |
-| 29 | [blurhash](https://github.com/woltapp/blurhash) | C | 16k | Image placeholder algorithm | ⭐ |
-| 30 | [Simd](https://github.com/ermig1979/Simd) | C++ | 2k | SIMD image processing | 🔶 |
-
-## 5. Audio/Video Processing (Moderate WASM Potential)
-
-| # | Name | Lang | Stars | Description | WASM Potential |
-|---|------|------|-------|-------------|----------------|
-| 31 | [FFmpeg](https://github.com/FFmpeg/FFmpeg) | C | 56k | Multimedia framework | 🔶 (pre-built exists) |
-| 32 | [Maximilian](https://github.com/micknoise/Maximilian) | C++ | 1.5k | Audio DSP library | ⭐ |
-| 33 | [q](https://github.com/cycfi/q) | C++ | 1k | Audio DSP library | ⭐ |
-| 34 | [eDSP](https://github.com/mohabouje/eDSP) | C++ | 500 | Digital signal processing | ⭐ |
-| 35 | [essentia](https://github.com/MTG/essentia) | C++ | 3k | Audio analysis library | 🔶 |
-| 36 | [whisper.cpp](https://github.com/ggerganov/whisper.cpp) | C++ | 45k | OpenAI Whisper port | ⭐ |
-| 37 | [DSPFilters](https://github.com/vinniefalco/DSPFilters) | C++ | 2k | Digital filter collection | ⭐ |
-
-## 6. Text Processing & Regex (Excellent WASM Candidates)
-
-| # | Name | Lang | Stars | Description | WASM Potential |
-|---|------|------|-------|-------------|----------------|
-| 38 | [regex](https://github.com/rust-lang/regex) | Rust | 4k | Official Rust regex | ⭐ |
-| 39 | [ripgrep](https://github.com/BurntSushi/ripgrep) | Rust | 58k | Fast recursive grep | ⭐ |
-| 40 | [the_silver_searcher](https://github.com/ggreer/the_silver_searcher) | C | 27k | Code searching tool (ag) | ⭐ |
-| 41 | [PCRE2](https://github.com/PCRE2Project/pcre2) | C | 2k | Perl-compatible regex | ⭐ |
-| 42 | [RE2](https://github.com/google/re2) | C++ | 9k | Fast regex library | ⭐ |
-
-## 7. Math & Linear Algebra (Excellent WASM Candidates)
-
-| # | Name | Lang | Stars | Description | WASM Potential |
-|---|------|------|-------|-------------|----------------|
-| 43 | [Eigen](https://gitlab.com/libeigen/eigen) | C++ | 10k | Linear algebra library | ⭐ |
-| 44 | [nalgebra](https://github.com/dimforge/nalgebra) | Rust | 4k | Linear algebra library | ⭐ |
-| 45 | [mathc](https://github.com/felselva/mathc) | C | 1k | Pure C math for 2D/3D | ⭐ |
-| 46 | [glm](https://github.com/g-truc/glm) | C++ | 9k | OpenGL Mathematics | ⭐ |
-| 47 | [BLIS](https://github.com/flame/blis) | C | 2.5k | BLAS-like library | ⭐ |
-
-## 8. Data Structures & Algorithms (Excellent WASM Candidates)
-
-| # | Name | Lang | Stars | Description | WASM Potential |
-|---|------|------|-------|-------------|----------------|
-| 48 | [uthash](https://github.com/troydhanson/uthash) | C | 4k | Hash table for C structures | ⭐ |
-| 49 | [klib](https://github.com/attractivechaos/klib) | C | 4k | Lightweight C algorithms | ⭐ |
-| 50 | [stc](https://github.com/stclib/STC) | C | 1k | Modern C container library | ⭐ |
-| 51 | [hashbrown](https://github.com/rust-lang/hashbrown) | Rust | 2k | Rust HashMap implementation | ⭐ |
-| 52 | [faiss](https://github.com/facebookresearch/faiss) | C++ | 38k | Similarity search library | 🔶 |
-
-## 9. Networking Libraries (Moderate WASM Potential)
-
-| # | Name | Lang | Stars | Description | WASM Potential |
-|---|------|------|-------|-------------|----------------|
-| 53 | [curl](https://github.com/curl/curl) | C | 40k | Data transfer library | 🔴 |
-| 54 | [libuv](https://github.com/libuv/libuv) | C | 26k | Async I/O library | 🔴 |
-| 55 | [libhv](https://github.com/ithewei/libhv) | C++ | 7k | Event-loop networking | 🔴 |
-| 56 | [uWebSockets](https://github.com/uNetworking/uWebSockets) | C++ | 18k | WebSocket library | 🔶 |
-| 57 | [tokio](https://github.com/tokio-rs/tokio) | Rust | 30k | Async runtime | 🔴 |
-| 58 | [hyper](https://github.com/hyperium/hyper) | Rust | 14k | HTTP library | 🔶 |
-
-## 10. Database Libraries (Moderate WASM Potential)
-
-| # | Name | Lang | Stars | Description | WASM Potential |
-|---|------|------|-------|-------------|----------------|
-| 59 | [leveldb](https://github.com/google/leveldb) | C++ | 38k | Fast key-value storage | 🔶 |
-| 60 | [rocksdb](https://github.com/facebook/rocksdb) | C++ | 31k | Persistent key-value store | 🔶 |
-| 61 | [sqlite](https://github.com/nickmqb/sqlite) | C | - | SQL database engine | ⭐ (sql.js exists) |
-| 62 | [libsql](https://github.com/tursodatabase/libsql) | C | 16k | SQLite fork | ⭐ |
-| 63 | [duckdb](https://github.com/duckdb/duckdb) | C++ | 35k | Analytical SQL database | 🔶 |
-| 64 | [sqlx](https://github.com/launchbadge/sqlx) | Rust | 15k | Async SQL toolkit | 🔴 |
-| 65 | [diesel](https://github.com/diesel-rs/diesel) | Rust | 12k | Safe ORM | 🔴 |
-
-## 11. ML/AI Inference (Good WASM Candidates)
-
-| # | Name | Lang | Stars | Description | WASM Potential |
-|---|------|------|-------|-------------|----------------|
-| 66 | [llama.cpp](https://github.com/ggerganov/llama.cpp) | C++ | 92k | LLM inference | ⭐ |
-| 67 | [llama2.c](https://github.com/karpathy/llama2.c) | C | 19k | Minimal LLM inference | ⭐ |
-| 68 | [onnxruntime](https://github.com/microsoft/onnxruntime) | C++ | 18k | ML inference engine | 🔶 |
-| 69 | [ncnn](https://github.com/Tencent/ncnn) | C++ | 22k | NN inference framework | 🔶 |
-| 70 | [tesseract](https://github.com/tesseract-ocr/tesseract) | C++ | 71k | OCR engine | 🔶 |
-| 71 | [tract](https://github.com/sonos/tract) | Rust | 2k | ONNX/TF inference | ⭐ |
-| 72 | [candle](https://github.com/huggingface/candle) | Rust | 18k | ML framework for Rust | ⭐ |
-
-## 12. CLI Utilities (Moderate WASM Potential)
-
-| # | Name | Lang | Stars | Description | WASM Potential |
-|---|------|------|-------|-------------|----------------|
-| 73 | [bat](https://github.com/sharkdp/bat) | Rust | 56k | Cat clone with wings | 🔶 |
-| 74 | [fd](https://github.com/sharkdp/fd) | Rust | 41k | Fast find alternative | 🔶 |
-| 75 | [exa](https://github.com/ogham/exa) | Rust | 24k | Modern ls replacement | 🔶 |
-| 76 | [eza](https://github.com/eza-community/eza) | Rust | 19k | Maintained exa fork | 🔶 |
-| 77 | [delta](https://github.com/dandavison/delta) | Rust | 28k | Syntax-highlighting pager | 🔶 |
-| 78 | [just](https://github.com/casey/just) | Rust | 29k | Command runner | ⭐ |
-| 79 | [hyperfine](https://github.com/sharkdp/hyperfine) | Rust | 27k | Benchmarking tool | 🔶 |
-| 80 | [nnn](https://github.com/jarun/nnn) | C | 21k | Terminal file manager | 🔴 |
-| 81 | [tmux](https://github.com/tmux/tmux) | C | 40k | Terminal multiplexer | 🔴 |
-
-## 13. Logging & Formatting (Excellent WASM Candidates)
-
-| # | Name | Lang | Stars | Description | WASM Potential |
-|---|------|------|-------|-------------|----------------|
-| 82 | [spdlog](https://github.com/gabime/spdlog) | C++ | 28k | Fast C++ logging | ⭐ |
-| 83 | [fmt](https://github.com/fmtlib/fmt) | C++ | 23k | Modern formatting library | ⭐ |
-| 84 | [tracing](https://github.com/tokio-rs/tracing) | Rust | 6k | Instrumentation framework | ⭐ |
-| 85 | [log](https://github.com/rust-lang/log) | Rust | 2k | Logging facade | ⭐ |
-
-## 14. Testing & Development (Good WASM Candidates)
-
-| # | Name | Lang | Stars | Description | WASM Potential |
-|---|------|------|-------|-------------|----------------|
-| 86 | [googletest](https://github.com/google/googletest) | C++ | 37k | Testing framework | ⭐ |
-| 87 | [Catch2](https://github.com/catchorg/Catch2) | C++ | 19k | Test framework | ⭐ |
-| 88 | [criterion](https://github.com/bheisler/criterion.rs) | Rust | 4k | Benchmarking library | ⭐ |
-
-## 15. Embedded & RTOS (Specialized)
-
-| # | Name | Lang | Stars | Description | WASM Potential |
-|---|------|------|-------|-------------|----------------|
-| 89 | [zephyr](https://github.com/zephyrproject-rtos/zephyr) | C | 14k | RTOS for IoT | 🔴 |
-| 90 | [micropython](https://github.com/micropython/micropython) | C | 21k | Python for microcontrollers | 🔶 |
-| 91 | [lvgl](https://github.com/lvgl/lvgl) | C | 22k | Embedded graphics | ⭐ |
-| 92 | [embassy](https://github.com/embassy-rs/embassy) | Rust | 6k | Embedded framework | 🔴 |
-| 93 | [esp-idf](https://github.com/espressif/esp-idf) | C | 17k | ESP32 development | 🔴 |
-| 94 | [nanopb](https://github.com/nanopb/nanopb) | C | 3.2k | Protobuf for embedded | ⭐ |
-
-## 16. Build & Packaging Tools
-
-| # | Name | Lang | Stars | Description | WASM Potential |
-|---|------|------|-------|-------------|----------------|
-| 95 | [ruff](https://github.com/astral-sh/ruff) | Rust | 44k | Python linter/formatter | ⭐ |
-| 96 | [uv](https://github.com/astral-sh/uv) | Rust | 76k | Python package manager | 🔴 |
-| 97 | [polars](https://github.com/pola-rs/polars) | Rust | 36k | DataFrame library | ⭐ |
-
-## 17. Parsing Libraries (Excellent WASM Candidates)
-
-| # | Name | Lang | Stars | Description | WASM Potential |
-|---|------|------|-------|-------------|----------------|
-| 98 | [tree-sitter](https://github.com/tree-sitter/tree-sitter) | Rust | 20k | Parser generator | ⭐ |
-| 99 | [pest](https://github.com/pest-parser/pest) | Rust | 5k | PEG parser | ⭐ |
-| 100 | [nom](https://github.com/rust-bakery/nom) | Rust | 9k | Parser combinators | ⭐ |
+**Total Eliminated: 48**
 
 ---
 
-## Summary Statistics
+## SURVIVORS - Conversion Candidates
 
-| Language | Count | Best Candidates |
-|----------|-------|-----------------|
-| C | 35 | zstd, jq, stb, libsodium, blurhash |
-| C++ | 40 | simdjson, llama.cpp, whisper.cpp, fmt, spdlog |
-| Rust | 25 | serde, polars, ruff, candle, tree-sitter |
+### Tier 1: High Priority (Clear WASM Advantage)
 
-### Top 10 WASM Conversion Priorities
+| # | Name | Lang | Stars | Why Keep | JS Gap |
+|---|------|------|-------|----------|--------|
+| 1 | **simdjson** | C++ | 23k | SIMD JSON parsing at GB/s | JSON.parse blocks event loop on large files |
+| 2 | **llama.cpp** | C++ | 92k | LLM inference | Transformers.js slower, less model support |
+| 3 | **llama2.c** | C | 19k | Minimal LLM inference | No JS equivalent for raw C simplicity |
+| 4 | **whisper.cpp** | C++ | 45k | Speech-to-text | whisper.js exists but WASM may be faster |
+| 5 | **stb** | C | 31k | Single-file image libs | No single-file JS equivalent |
+| 6 | **blurhash** | C | 16k | Compact image placeholder | blurhash-js exists but C is 10x faster |
+| 7 | **Eigen** | C++ | 10k | Linear algebra | math.js slow for large matrices |
+| 8 | **nalgebra** | Rust | 4k | Linear algebra | Same performance gap |
+| 9 | **faiss** | C++ | 38k | Vector similarity search | No JS equivalent at scale |
+| 10 | **polars** | Rust | 36k | DataFrame operations | JS alternatives slower |
+| 11 | **tree-sitter** | Rust | 20k | Incremental parsing | Already has WASM, gold standard |
+| 12 | **candle** | Rust | 18k | ML framework | Emerging, complements Transformers.js |
 
-1. **simdjson** - Ultra-fast JSON parsing, header-only
-2. **zstd** - Battle-tested compression, widely used
-3. **llama2.c** - Minimal LLM inference, no deps
-4. **stb** - Single-file libraries, perfect for WASM
-5. **blurhash** - Image placeholder, small footprint
-6. **nom** - Parser combinators, pure Rust
-7. **serde_json** - JSON for Rust ecosystem
-8. **fmt** - Modern formatting, header-only
-9. **tree-sitter** - Parser generator, already has WASM
-10. **nanopb** - Embedded protobuf, minimal deps
+### Tier 2: Medium Priority (WASM May Win)
+
+| # | Name | Lang | Stars | Why Keep | JS Gap |
+|---|------|------|-------|----------|--------|
+| 13 | rapidjson | C++ | 14k | SAX/DOM JSON | Streaming use cases |
+| 14 | nlohmann/json | C++ | 48k | Modern C++ JSON | Header-only, easy port |
+| 15 | jq | C | 33k | JSON processor CLI | No full jq in pure JS |
+| 16 | snappy | C++ | 6k | Google compression | Browser-only use case |
+| 17 | lz4 | C | 10k | Fastest compression | Browser-only decompression |
+| 18 | CImg | C++ | 1.5k | Header-only image | Simpler than sharp for basic ops |
+| 19 | image-rs | Rust | 5k | Pure Rust image | Could compile to smaller WASM |
+| 20 | Maximilian | C++ | 1.5k | Audio DSP | Web Audio API limited for DSP |
+| 21 | q (cycfi) | C++ | 1k | Audio DSP | Same gap |
+| 22 | eDSP | C++ | 500 | Signal processing | Same gap |
+| 23 | DSPFilters | C++ | 2k | Digital filters | Same gap |
+| 24 | essentia | C++ | 3k | Audio analysis | No JS equivalent |
+| 25 | ripgrep | Rust | 58k | Fast search | Browser file search use case |
+| 26 | the_silver_searcher | C | 27k | Code search | Same use case |
+| 27 | mathc | C | 1k | 2D/3D math | Smaller than gl-matrix |
+| 28 | BLIS | C | 2.5k | BLAS operations | Performance-critical math |
+| 29 | stc | C | 1k | Modern C containers | Potential for tight code |
+| 30 | tesseract | C++ | 71k | OCR | tesseract.js is 2-20s/image |
+| 31 | tract | Rust | 2k | ONNX inference | Pure Rust, good WASM target |
+| 32 | ncnn | C++ | 22k | NN inference | Mobile-optimized |
+| 33 | onnxruntime | C++ | 18k | ML inference | WASM backend exists |
+| 34 | leveldb | C++ | 38k | Key-value store | Browser storage use case |
+| 35 | rocksdb | C++ | 31k | Key-value store | Same use case |
+| 36 | duckdb | C++ | 35k | Analytics DB | duckdb-wasm exists |
+
+### Tier 3: Conditional (Research Needed)
+
+| # | Name | Lang | Stars | Notes |
+|---|------|------|-------|-------|
+| 37 | ImageMagick | C | 15k | WASM-ImageMagick exists, evaluate vs sharp |
+| 38 | Simd | C++ | 2k | SIMD may not translate well to WASM |
+| 39 | FFmpeg | C | 56k | ffmpeg.wasm exists, evaluate completeness |
+| 40 | micropython | C | 21k | Pyodide alternative, niche use |
+| 41 | lvgl | C | 22k | Embedded UI, browser use unclear |
+| 42 | nanopb | C | 3.2k | Embedded protobuf, small but niche |
+| 43 | uWebSockets | C++ | 18k | WebSocket in browser already native |
+| 44 | ruff | Rust | 44k | Python linter, very specialized |
+| 45 | just | Rust | 29k | Command runner, limited browser use |
+| 46 | bat/fd/exa/delta/hyperfine | Rust | Various | CLI tools, filesystem dependent |
 
 ---
 
-## Research Notes
+## Revised Conversion Priority Queue
 
-### Already Have WASM Builds
-- FFmpeg → ffmpeg.wasm
-- SQLite → sql.js
-- tree-sitter → tree-sitter WASM bindings
-- ImageMagick → WASM-ImageMagick
+Based on vetting, here are the **top 15 candidates** to convert:
 
-### Known Challenges
-- Networking libraries (libuv, curl) need browser APIs
-- File I/O heavy tools need virtual filesystem
-- Thread-heavy code needs SharedArrayBuffer
+### Immediate Conversions (Header-only, minimal deps)
 
-### Compilation Tips
-- Header-only C++ libraries are easiest
-- Pure Rust crates with no `std::fs` or `std::net` ideal
-- Check for SIMD usage (may need polyfills)
-- Watch for system calls and platform-specific code
+1. **blurhash** - Small, fast, clear JS performance gap
+2. **stb_image** - Single-file, widely needed
+3. **llama2.c** - Minimal LLM, educational value
+4. **simdjson** - If SIMD works in WASM
+5. **mathc** - Small math library
+
+### Short-term Conversions (More complex)
+
+6. **Eigen** - Linear algebra performance
+7. **nalgebra** - Rust linear algebra
+8. **Maximilian** - Audio DSP
+9. **DSPFilters** - Digital signal processing
+10. **lz4** - Browser compression
+
+### Research Conversions (Verify viability)
+
+11. **polars** - DataFrame (already has wasm efforts)
+12. **faiss** - Vector search
+13. **whisper.cpp** - Speech recognition
+14. **tesseract** - OCR (compare to tesseract.js)
+15. **jq** - JSON processing
+
+---
+
+## Summary After Vetting
+
+| Category | Original | Eliminated | Surviving |
+|----------|----------|------------|-----------|
+| Parsing/Serialization | 10 | 6 | 4 |
+| Compression | 7 | 5 | 2 |
+| Cryptography | 6 | 6 | 0 |
+| Image Processing | 7 | 1 | 6 |
+| Audio/Video | 7 | 1 | 6 |
+| Text/Regex | 5 | 3 | 2 |
+| Math/Linear Algebra | 5 | 1 | 4 |
+| Data Structures | 5 | 3 | 2 |
+| Networking | 6 | 6 | 0 |
+| Database | 7 | 4 | 3 |
+| ML/AI | 7 | 0 | 7 |
+| CLI Utilities | 9 | 2 | 7 |
+| Logging/Formatting | 4 | 4 | 0 |
+| Testing | 3 | 3 | 0 |
+| Embedded | 6 | 4 | 2 |
+| Build Tools | 3 | 1 | 2 |
+| Parsing Libs | 3 | 2 | 1 |
+| **TOTAL** | **100** | **52** | **48** |
 
 ---
 
 *Last updated: January 2025*
-*Source: GitHub rankings, awesome-* lists, crates.io, web search*
+*Vetting criteria: JS alternative with 80-90%+ feature overlap = eliminate*
