@@ -12,6 +12,8 @@ This document ranks all 18 product candidates by **automatability** (can Claude 
 
 **Key Insight:** We should build API primitives and libraries first (fully automatable), then pipelines (some verification needed), then CLI tools (no UI), and defer UI-heavy applications until design systems or Graham's input is available.
 
+**IMPORTANT:** "Completion" means **built + formally verified locally**, NOT deployed. Deployment requires credentials (Cloudflare account, npm account) which are not yet automated. All products can reach 100% completion status without deployment.
+
 ---
 
 ## Evaluation Criteria
@@ -36,6 +38,33 @@ This document ranks all 18 product candidates by **automatability** (can Claude 
 
 ---
 
+## Deployment Status (Current: Not Automated)
+
+**All products can be built and verified locally without deployment credentials.**
+
+| Product Type | Local Verification | Deployment Needs (Later) |
+|--------------|-------------------|-------------------------|
+| **npm libraries** | `bun test` passes, package builds | npm account + `npm publish` |
+| **Cloudflare Workers** | `wrangler dev` + local tests pass | CF account + `wrangler deploy` |
+| **Bun CLI tools** | `bun test` passes, CLI runs locally | npm account (optional) or direct distribution |
+| **Static sites (Astro)** | `bun run build` + local preview works | CF Pages / Vercel / Netlify account |
+| **Next.js apps** | `bun run dev` + tests pass | Vercel / CF Pages account |
+
+**Completion criteria (no deployment required):**
+- ✅ All source code written
+- ✅ All tests passing locally
+- ✅ Build succeeds (no errors)
+- ✅ Local preview/execution works
+- ✅ Documentation complete (README, API docs)
+- ✅ Formal verification criteria met
+
+**Future deployment setup (batched later):**
+- Graham creates Cloudflare account → provides credentials
+- Graham creates npm account → provides access token
+- Automate deployment in CI/CD after credentials available
+
+---
+
 ## Ranked Product List
 
 ### TIER 1: Fully Automatable + Verifiable (Build First)
@@ -49,9 +78,10 @@ This document ranks all 18 product candidates by **automatability** (can Claude 
 
 **Why These First:**
 - **No UI decisions** — Pure APIs, fully specifiable via tests
-- **Deterministic outputs** — Given input X, output Y is verifiable
-- **Tech stack learning** — Teaches npm packaging + Cloudflare Worker deployment
+- **Deterministic outputs** — Given input X, output Y is verifiable locally
+- **Tech stack learning** — Teaches npm packaging + Cloudflare Worker patterns
 - **High utility** — All are 4-5 star viability products
+- **100% locally verifiable** — No deployment needed to prove correctness
 
 **Formal Verification Strategy:**
 ```bash
@@ -203,92 +233,102 @@ Tests:
 
 ### Phase 1: API Primitives (4 products, ~75-125 hours)
 
-**Goal:** Establish npm + Cloudflare Worker workflows
+**Goal:** Establish npm + Cloudflare Worker workflows (local verification only)
 
 1. **asset-hash** (30-50h)
    - Teaches: npm package structure, TypeScript library, WASM integration
-   - Output: `@graham/asset-hash` on npm
+   - Local output: `dist/` bundle, `bun test` passing
    - Tests: Hash verification, thumbhash generation
+   - **No deployment needed** — Package builds, tests pass
 
 2. **sanitize-edge** (15-25h)
-   - Teaches: Cloudflare Worker deployment, ammonia WASM
-   - Output: `sanitize.workers.dev` API
+   - Teaches: Cloudflare Worker structure, ammonia WASM
+   - Local output: `wrangler dev` running, tests passing
    - Tests: XSS test suite (OWASP vectors)
+   - **No deployment needed** — Worker runs locally, tests pass
 
 3. **thumbhash-edge** (20-30h)
-   - Teaches: Worker + multiple WASM modules, KV caching
-   - Output: `thumbhash.workers.dev` API
+   - Teaches: Worker + multiple WASM modules, KV caching patterns
+   - Local output: `wrangler dev` + tests passing
    - Tests: Reference images → known hashes
+   - **No deployment needed** — Worker testable via local server
 
 4. **minify-edge** (10-20h)
    - Teaches: HTML processing at edge
-   - Output: `minify.workers.dev` API
+   - Local output: `wrangler dev` + tests passing
    - Tests: Size reduction, semantic preservation
+   - **No deployment needed** — Minification verifiable locally
 
-**Milestone:** 4 production APIs, npm + CF Worker expertise
+**Milestone:** 4 completed products (built + tested locally), npm + CF Worker expertise
 
 ---
 
 ### Phase 2: Complex Pipelines (2 products, ~90-130 hours)
 
-**Goal:** Multi-step edge processing
+**Goal:** Multi-step edge processing (local verification)
 
 5. **readable-edge** (40-60h)
    - Teaches: Pipeline orchestration, multiple WASM modules
-   - Output: `readable.workers.dev` API
-   - Tests: 20 reference articles, output quality sampling
+   - Local output: `wrangler dev` + 20 test articles passing
+   - Tests: Reference articles → markdown extraction quality
+   - **No deployment needed** — Pipeline testable with local fixtures
 
 6. **webhook-edge** (50-70h)
    - Teaches: Signature validation, per-provider configs
-   - Output: `webhook.workers.dev` API + provider templates
-   - Tests: Known signatures, malformed payloads
+   - Local output: `wrangler dev` + provider template tests passing
+   - Tests: Known signatures (Stripe, GitHub, Shopify), malformed payloads
+   - **No deployment needed** — Signature verification provable locally
 
-**Milestone:** 6 production APIs, pipeline expertise
+**Milestone:** 6 completed products, pipeline expertise
 
 ---
 
 ### Phase 3: Visual Outputs (1 product, ~30-50 hours)
 
-**Goal:** Image generation verification
+**Goal:** Image generation verification (local)
 
 7. **og-image-edge** (30-50h)
    - Teaches: Satori + resvg, image generation
-   - Output: `og.workers.dev` API
-   - Verification: Graham reviews 5 template designs (one-time)
-   - Tests: Successful PNG generation, correct dimensions
+   - Local output: `wrangler dev` + PNG generation working
+   - Verification: Graham reviews 5 template designs (one-time manual check)
+   - Tests: Successful PNG generation, correct dimensions (1200x630)
+   - **No deployment needed** — Image generation verifiable by file output
 
-**Milestone:** 7 production APIs
+**Milestone:** 7 completed products
 
 ---
 
 ### Phase 4: CLI Tools (2 products, ~55-85 hours)
 
-**Goal:** Command-line workflow
+**Goal:** Command-line workflow (local verification)
 
 8. **hash-vault** CLI (40-60h)
    - Teaches: Bun CLI tool, file system operations
-   - Output: `@graham/hash-vault` CLI
-   - Tests: Duplicate detection accuracy
+   - Local output: `./hash-vault` executable, tests passing
+   - Tests: Duplicate detection accuracy on test fixtures
+   - **No deployment needed** — CLI runs locally, tests verify correctness
 
 9. **mosaicly** CLI (15-25h)
    - Teaches: Compression CLI
-   - Output: `@graham/mosaicly` CLI
+   - Local output: `./mosaicly` executable, tests passing
    - Tests: Compression/decompression roundtrip
+   - **No deployment needed** — Compression verifiable locally
 
-**Milestone:** 9 products (7 APIs + 2 CLIs)
+**Milestone:** 9 completed products (6 workers + 1 lib + 2 CLIs)
 
 ---
 
 ### Phase 5: Static Parsers (1 product, ~40-60 hours)
 
-**Goal:** Astro static site generation
+**Goal:** Astro static site generation (local preview)
 
 10. **parser-lab** core (40-60h)
     - Teaches: Astro framework, PEGTL WASM
-    - Output: parserlab.com (static site)
-    - Tests: Grammar parsing correctness
+    - Local output: `bun run build` succeeds, preview server works
+    - Tests: Grammar parsing correctness (JSON, CSV test grammars)
+    - **No deployment needed** — Static site builds and previews locally
 
-**Milestone:** 10 products completed
+**Milestone:** 10 completed products (6 workers + 1 lib + 2 CLIs + 1 static site)
 
 ---
 
@@ -468,50 +508,64 @@ describe('thumbhash-edge', () => {
 
 ## Success Metrics by Phase
 
+**NOTE:** All metrics are for LOCAL COMPLETION, not deployment.
+
 ### Phase 1 (APIs):
-- ✅ 4 working APIs
-- ✅ npm package published
-- ✅ CF Workers deployed
+- ✅ 4 products built and tested locally
+- ✅ npm package builds successfully
+- ✅ CF Workers run via `wrangler dev`
 - ✅ Test suites 100% passing
+- ⏸️ Deployment: Deferred until credentials available
 
 ### Phase 2 (Pipelines):
-- ✅ 6 total APIs
-- ✅ Complex pipeline working
-- ✅ Per-provider configs validated
+- ✅ 6 total products completed locally
+- ✅ Complex pipelines working in `wrangler dev`
+- ✅ Per-provider configs validated via tests
+- ⏸️ Deployment: Deferred
 
 ### Phase 3 (Visual):
-- ✅ 7 total APIs
-- ✅ Image generation working
-- ⚠️ Graham reviewed templates (one-time)
+- ✅ 7 total products completed locally
+- ✅ Image generation working (PNG files generated)
+- ⚠️ Graham reviewed templates (one-time manual inspection)
+- ⏸️ Deployment: Deferred
 
 ### Phase 4 (CLI):
-- ✅ 9 total products
-- ✅ CLI tools published
-- ✅ File operations tested
+- ✅ 9 total products completed locally
+- ✅ CLI tools executable locally
+- ✅ File operations tested on fixtures
+- ⏸️ Publishing to npm: Deferred
 
 ### Phase 5 (Parser):
-- ✅ 10 total products
-- ✅ Static site deployed
+- ✅ 10 total products completed locally
+- ✅ Static site builds and previews
 - ✅ Grammar parsing tested
+- ⏸️ Deployment: Deferred
 
 ---
 
 ## Next Actions
 
 ### Immediate:
-1. **Build asset-hash** — First npm library
+1. **Build asset-hash** — First npm library (local verification only)
 2. Document npm package workflow for future products
 3. Create template for future npm libraries
+4. **Verify locally:** `bun test` passes, package builds
 
 ### After asset-hash:
-1. **Build sanitize-edge** — First CF Worker
-2. Document CF Worker deployment workflow
+1. **Build sanitize-edge** — First CF Worker (local testing only)
+2. Document CF Worker workflow (`wrangler dev`, local tests)
 3. Create CF Worker template for ProjectScaffold
+4. **Verify locally:** `wrangler dev` runs, XSS tests pass
 
-### After 4 APIs:
+### After 4 Products (Phase 1 Complete):
 1. **Update ProjectScaffold** — Add CF Worker template
-2. **Evaluate progress** — Are builds going smoothly?
+2. **Evaluate progress** — Are local builds/tests working smoothly?
 3. **Proceed to Phase 2** — readable-edge
+
+### Future (After Phase 5):
+1. **Batch deployment setup** — Graham provides credentials
+2. **Automate deployments** — Add CI/CD workflows
+3. **Publish products** — npm, Cloudflare, etc.
 
 ---
 
@@ -523,4 +577,26 @@ describe('thumbhash-edge', () => {
 
 ---
 
-**Recommendation:** Start with Phase 1 (4 API products). These are fully automatable, formally verifiable, and teach critical infrastructure (npm + CF Workers). After completing Phase 1, evaluate if ProjectScaffold needs updates, then proceed to Phase 2.
+## Final Recommendation
+
+**Start with Phase 1 (4 API products) — Local verification only.**
+
+These products are:
+- ✅ Fully automatable (no UI decisions)
+- ✅ Formally verifiable (deterministic tests)
+- ✅ Teach critical workflows (npm packages, CF Workers)
+- ✅ **Can be completed 100% locally** without deployment credentials
+
+**Completion criteria:**
+1. Source code complete
+2. Tests passing (`bun test` 100%)
+3. Local execution works (`wrangler dev` or package builds)
+4. Documentation complete (README, API docs)
+5. Formal verification criteria met
+
+**Deployment deferred until:**
+- Graham creates Cloudflare account
+- Graham creates npm account
+- Credentials are automated in CI/CD
+
+**After Phase 1:** Evaluate ProjectScaffold updates, then proceed to Phase 2.
