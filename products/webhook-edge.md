@@ -1,8 +1,10 @@
 # webhook-edge
 
 **Type:** Pipeline Service (Edge)
-**Status:** Spec
+**Status:** Built
 **Viability:** ⭐⭐⭐
+**Repository:** https://github.com/batzlerg/webhook-edge
+**Implementation:** `/Users/graham/Documents/projects/webhook-edge`
 
 ---
 
