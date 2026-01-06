@@ -66,8 +66,14 @@ Curated list of C, C++, Rust libraries vetted for WebAssembly conversion. Update
 | 46 | uv | Rust | N/A (Python tool) | Python-specific, file I/O heavy |
 | 47 | pest | Rust | peggy, chevrotain, nearley | Mature JS parser generators |
 | 48 | nom | Rust | parsimmon, chevrotain | JS parser combinators exist |
+| 49 | jq | C | Native JS map/filter/reduce | Interpreter/DSL - 115x slower than JS |
+| 50 | rapidjson | C++ | Native JSON.parse | V8 native JSON.parse faster |
+| 51 | nlohmann/json | C++ | Native JSON.parse | V8 native JSON.parse faster |
+| 52 | simdjson | C++ | Native JSON.parse | 30% slower than JSON.parse (proven) |
+| 53 | ripgrep | Rust | Native String.indexOf/search | String-heavy, boundary overhead |
+| 54 | the_silver_searcher | C | Native String search | String-heavy, boundary overhead |
 
-**Total Eliminated: 48**
+**Total Eliminated: 54**
 
 ---
 
@@ -94,100 +100,113 @@ Curated list of C, C++, Rust libraries vetted for WebAssembly conversion. Update
 
 | # | Name | Lang | Stars | Why Keep | JS Gap |
 |---|------|------|-------|----------|--------|
-| 13 | rapidjson | C++ | 14k | SAX/DOM JSON | Streaming use cases |
-| 14 | nlohmann/json | C++ | 48k | Modern C++ JSON | Header-only, easy port |
-| 15 | jq | C | 33k | JSON processor CLI | No full jq in pure JS |
-| 16 | snappy | C++ | 6k | Google compression | Browser-only use case |
-| 17 | lz4 | C | 10k | Fastest compression | Browser-only decompression |
-| 18 | CImg | C++ | 1.5k | Header-only image | Simpler than sharp for basic ops |
-| 19 | image-rs | Rust | 5k | Pure Rust image | Could compile to smaller WASM |
-| 20 | Maximilian | C++ | 1.5k | Audio DSP | Web Audio API limited for DSP |
-| 21 | q (cycfi) | C++ | 1k | Audio DSP | Same gap |
-| 22 | eDSP | C++ | 500 | Signal processing | Same gap |
-| 23 | DSPFilters | C++ | 2k | Digital filters | Same gap |
-| 24 | essentia | C++ | 3k | Audio analysis | No JS equivalent |
-| 25 | ripgrep | Rust | 58k | Fast search | Browser file search use case |
-| 26 | the_silver_searcher | C | 27k | Code search | Same use case |
-| 27 | mathc | C | 1k | 2D/3D math | Smaller than gl-matrix |
-| 28 | BLIS | C | 2.5k | BLAS operations | Performance-critical math |
-| 29 | stc | C | 1k | Modern C containers | Potential for tight code |
-| 30 | tesseract | C++ | 71k | OCR | tesseract.js is 2-20s/image |
-| 31 | tract | Rust | 2k | ONNX inference | Pure Rust, good WASM target |
-| 32 | ncnn | C++ | 22k | NN inference | Mobile-optimized |
-| 33 | onnxruntime | C++ | 18k | ML inference | WASM backend exists |
-| 34 | leveldb | C++ | 38k | Key-value store | Browser storage use case |
-| 35 | rocksdb | C++ | 31k | Key-value store | Same use case |
-| 36 | duckdb | C++ | 35k | Analytics DB | duckdb-wasm exists |
+| 13 | xxHash | C | 1.5k | Hashing | Proven 5.87x faster than JS |
+| 14 | snappy | C++ | 6k | Google compression | Proven 4.2x speedup |
+| 15 | lz4 | C | 10k | Fastest compression | Proven 6.5 GB/s compress |
+| 16 | CImg | C++ | 1.5k | Header-only image | Simpler than sharp for basic ops |
+| 17 | image-rs | Rust | 5k | Pure Rust image | Could compile to smaller WASM |
+| 18 | Maximilian | C++ | 1.5k | Audio DSP | Proven 6.7x speedup |
+| 19 | q (cycfi) | C++ | 1k | Audio DSP | Similar to Maximilian |
+| 20 | eDSP | C++ | 500 | Signal processing | Similar to DSPFilters |
+| 21 | DSPFilters | C++ | 2k | Digital filters | Proven 13.5x speedup |
+| 22 | essentia | C++ | 3k | Audio analysis | No JS equivalent |
+| 23 | mathc | C | 1k | 2D/3D math | Proven 33M mat4 ops/sec |
+| 24 | BLIS | C | 2.5k | BLAS operations | Performance-critical math |
+| 25 | stc | C | 1k | Modern C containers | Potential for tight code |
+| 26 | tract | Rust | 2k | ONNX inference | Pure Rust, good WASM target |
+| 27 | ncnn | C++ | 22k | NN inference | Mobile-optimized |
+| 28 | onnxruntime | C++ | 18k | ML inference | WASM backend exists |
+| 29 | leveldb | C++ | 38k | Key-value store | Browser storage use case |
+| 30 | rocksdb | C++ | 31k | Key-value store | Same use case |
 
-### Tier 3: Conditional (Research Needed)
+### Tier 3: Use Pre-Built (Don't Rebuild)
+
+| # | Name | Lang | Stars | Pre-Built Solution | Reason |
+|---|------|------|-------|-------------------|--------|
+| 31 | tesseract | C++ | 71k | tesseract.js | Proven: Complex deps, 2.5MB maintained |
+| 32 | duckdb | C++ | 35k | duckdb-wasm | Official WASM build exists |
+| 33 | FFmpeg | C | 56k | ffmpeg.wasm | Actively maintained, complete |
+| 34 | OpenCV | C++ | 80k | opencv.js | Official build, well-tested |
+| 35 | ImageMagick | C | 15k | wasm-imagemagick | Exists, evaluate before rebuilding |
+
+### Tier 4: Conditional (Verify Pattern Match)
 
 | # | Name | Lang | Stars | Notes |
 |---|------|------|-------|-------|
-| 37 | ImageMagick | C | 15k | WASM-ImageMagick exists, evaluate vs sharp |
-| 38 | Simd | C++ | 2k | SIMD may not translate well to WASM |
-| 39 | FFmpeg | C | 56k | ffmpeg.wasm exists, evaluate completeness |
-| 40 | micropython | C | 21k | Pyodide alternative, niche use |
-| 41 | lvgl | C | 22k | Embedded UI, browser use unclear |
-| 42 | nanopb | C | 3.2k | Embedded protobuf, small but niche |
-| 43 | uWebSockets | C++ | 18k | WebSocket in browser already native |
-| 44 | ruff | Rust | 44k | Python linter, very specialized |
-| 45 | just | Rust | 29k | Command runner, limited browser use |
-| 46 | bat/fd/exa/delta/hyperfine | Rust | Various | CLI tools, filesystem dependent |
+| 36 | Simd | C++ | 2k | SIMD may not translate (verify fallback) |
+| 37 | micropython | C | 21k | Interpreter (likely slow like jq) |
+| 38 | lvgl | C | 22k | Embedded UI, browser use unclear |
+| 39 | nanopb | C | 3.2k | Embedded protobuf, niche |
+| 40 | uWebSockets | C++ | 18k | WebSocket already native |
+| 41 | ruff | Rust | 44k | Python linter, specialized |
+| 42 | just | Rust | 29k | Command runner, limited browser use |
+| 43 | bat/fd/exa/delta/hyperfine | Rust | Various | CLI tools, filesystem dependent |
 
 ---
 
 ## Revised Conversion Priority Queue
 
-Based on vetting, here are the **top 15 candidates** to convert:
+Based on 13 conversion experiments with documented success/failure patterns:
 
-### Immediate Conversions (Header-only, minimal deps)
+### ✅ Completed & Proven
 
-1. **blurhash** - Small, fast, clear JS performance gap
-2. **stb_image** - Single-file, widely needed
-3. **llama2.c** - Minimal LLM, educational value
-4. **simdjson** - If SIMD works in WASM
-5. **mathc** - Small math library
+1. ✅ **blurhash** - 5,135 decodes/sec, 21KB
+2. ✅ **stb_image** - 3.9x speedup, 103KB
+3. ✅ **mathc** - 33M mat4 ops/sec, 19KB
+4. ✅ **Eigen** - 7.4x speedup, 113KB
+5. ✅ **nalgebra** - 7.4x speedup, 72KB (Rust)
+6. ✅ **Maximilian** - 6.7x speedup, 39KB
+7. ✅ **DSPFilters** - 13.5x speedup, 59KB
+8. ✅ **lz4** - 6.5 GB/s compress, 15.6KB
+9. ✅ **snappy** - 4.2x speedup, 21KB
+10. ✅ **xxHash** - 5.87x speedup, 29KB
 
-### Short-term Conversions (More complex)
+### Next Immediate Conversions (High Confidence)
 
-6. **Eigen** - Linear algebra performance
-7. **nalgebra** - Rust linear algebra
-8. **Maximilian** - Audio DSP
-9. **DSPFilters** - Digital signal processing
-10. **lz4** - Browser compression
+11. **essentia** - Audio analysis (like Maximilian/DSPFilters)
+12. **q (cycfi)** - Audio DSP (similar pattern)
+13. **eDSP** - Signal processing (similar pattern)
+14. **CImg** - Header-only image (like stb_image)
+15. **BLIS** - BLAS operations (like Eigen)
 
 ### Research Conversions (Verify viability)
 
-11. **polars** - DataFrame (already has wasm efforts)
-12. **faiss** - Vector search
-13. **whisper.cpp** - Speech recognition
-14. **tesseract** - OCR (compare to tesseract.js)
-15. **jq** - JSON processing
+16. **llama2.c** - Minimal LLM (check mmap issue)
+17. **llama.cpp** - LLM inference (large, complex)
+18. **whisper.cpp** - Speech recognition (check audio I/O)
+19. **polars** - DataFrame (check if wasm effort complete)
+20. **faiss** - Vector search (pure computation, should work)
 
 ---
 
-## Summary After Vetting
+## Summary After Pattern-Based Vetting
 
-| Category | Original | Eliminated | Surviving |
-|----------|----------|------------|-----------|
-| Parsing/Serialization | 10 | 6 | 4 |
-| Compression | 7 | 5 | 2 |
-| Cryptography | 6 | 6 | 0 |
-| Image Processing | 7 | 1 | 6 |
-| Audio/Video | 7 | 1 | 6 |
-| Text/Regex | 5 | 3 | 2 |
-| Math/Linear Algebra | 5 | 1 | 4 |
-| Data Structures | 5 | 3 | 2 |
-| Networking | 6 | 6 | 0 |
-| Database | 7 | 4 | 3 |
-| ML/AI | 7 | 0 | 7 |
-| CLI Utilities | 9 | 2 | 7 |
-| Logging/Formatting | 4 | 4 | 0 |
-| Testing | 3 | 3 | 0 |
-| Embedded | 6 | 4 | 2 |
-| Build Tools | 3 | 1 | 2 |
-| Parsing Libs | 3 | 2 | 1 |
-| **TOTAL** | **100** | **52** | **48** |
+| Category | Original | Eliminated | Use Pre-Built | Surviving |
+|----------|----------|------------|---------------|-----------|
+| Parsing/Serialization | 10 | 10 | 0 | 0 |
+| Compression | 7 | 5 | 0 | 2 ✅ |
+| Cryptography | 6 | 6 | 0 | 0 |
+| Image Processing | 7 | 1 | 2 | 4 ✅ |
+| Audio/Video | 7 | 1 | 1 | 5 ✅ |
+| Text/Regex | 5 | 5 | 0 | 0 |
+| Math/Linear Algebra | 5 | 0 | 0 | 5 ✅ |
+| Data Structures | 5 | 3 | 0 | 2 |
+| Networking | 6 | 6 | 0 | 0 |
+| Database | 7 | 4 | 2 | 1 |
+| ML/AI | 7 | 0 | 0 | 7 ✅ |
+| CLI Utilities | 9 | 9 | 0 | 0 |
+| Logging/Formatting | 4 | 4 | 0 | 0 |
+| Testing | 3 | 3 | 0 | 0 |
+| Embedded | 6 | 4 | 0 | 2 |
+| Build Tools | 3 | 1 | 0 | 2 |
+| Parsing Libs | 3 | 3 | 0 | 0 |
+| **TOTAL** | **100** | **54** | **5** | **30** |
+
+**Key Changes from Experiments:**
+- Eliminated all JSON/text parsers (simdjson, jq proven slower)
+- Eliminated all CLI tools with string-heavy processing
+- Moved complex builds with pre-built to separate tier
+- Proven conversions marked with ✅ (10 completed, all successful)
 
 ---
 
