@@ -1,11 +1,13 @@
 # minify-edge
 
 **Type:** API Primitive (Cloudflare Worker)
-**Status:** Built
+**Status:** ✅ **DEPLOYED**
 **Viability:** ⭐⭐⭐⭐
 
 **Repository:** https://github.com/batzlerg/minify-edge
 **Implementation:** `/Users/graham/Documents/projects/minify-edge`
+**Live URL:** https://minify-edge.grahammakes.workers.dev/
+**Deployed:** 2026-01-06
 
 ---
 

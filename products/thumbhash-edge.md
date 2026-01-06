@@ -3,9 +3,11 @@
 > Modern image placeholder generation with alpha channel support, running on Cloudflare Workers via WebAssembly.
 > Open source. Self-host for free. No data leaves the edge.
 
-**Status:** Built
+**Status:** ✅ **DEPLOYED**
 **Repository:** https://github.com/batzlerg/thumbhash-edge
 **Implementation:** `/Users/graham/Documents/projects/thumbhash-edge`
+**Live URL:** https://thumbhash-edge.grahammakes.workers.dev/
+**Deployed:** 2026-01-06
 **Tagline:** "Self-hosted ThumbHash API for the edge"
 
 ---

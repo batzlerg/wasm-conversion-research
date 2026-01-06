@@ -1,8 +1,13 @@
 # readable-edge
 
 **Type:** Pipeline Service (Edge)
-**Status:** Spec
+**Status:** ⚠️ **DEPLOYED (Runtime Errors)**
 **Viability:** ⭐⭐⭐⭐
+**Repository:** https://github.com/batzlerg/readable-edge
+**Implementation:** `/Users/graham/Documents/projects/readable-edge`
+**Live URL:** https://readable-edge.grahammakes.workers.dev/
+**Deployed:** 2026-01-06
+**Known Issue:** "document is not defined" error with linkedom in Workers environment
 
 ---
 

@@ -1,11 +1,14 @@
 # AssetHash
 
 **Type:** Developer Library (npm)
-**Status:** Built
+**Status:** Built (Not Published to NPM)
 **Viability:** ⭐⭐⭐⭐⭐
 
 **Repository:** https://github.com/batzlerg/asset-hash
 **Implementation:** `/Users/graham/Documents/projects/asset-hash`
+**Tests:** 32/32 passing ✅
+**Build:** Complete
+**Next Step:** Publish to npm as @graham/asset-hash
 
 ---
 

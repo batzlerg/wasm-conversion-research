@@ -1,11 +1,14 @@
 # sanitize-edge
 
 **Type:** API Primitive (Cloudflare Worker)
-**Status:** Built
+**Status:** ⚠️ **DEPLOYED (Runtime Errors)**
 **Viability:** ⭐⭐⭐⭐⭐
 
 **Repository:** https://github.com/batzlerg/sanitize-edge
 **Implementation:** `/Users/graham/Documents/projects/sanitize-edge`
+**Live URL:** https://sanitize-edge.grahammakes.workers.dev/
+**Deployed:** 2026-01-06
+**Known Issue:** "import_isomorphic_dompurify.default.sanitize is not a function" - DOMPurify import incompatibility with Workers
 
 ---
 

@@ -1,10 +1,12 @@
 # webhook-edge
 
 **Type:** Pipeline Service (Edge)
-**Status:** Built
+**Status:** ✅ **DEPLOYED**
 **Viability:** ⭐⭐⭐
 **Repository:** https://github.com/batzlerg/webhook-edge
 **Implementation:** `/Users/graham/Documents/projects/webhook-edge`
+**Live URL:** https://webhook-edge.grahammakes.workers.dev/
+**Deployed:** 2026-01-06
 
 ---
 
