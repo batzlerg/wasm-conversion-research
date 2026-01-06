@@ -1,8 +1,11 @@
 # AssetHash
 
-**Type:** Developer Library (Browser)
-**Status:** Spec
+**Type:** Developer Library (npm)
+**Status:** Built
 **Viability:** ⭐⭐⭐⭐⭐
+
+**Repository:** https://github.com/batzlerg/asset-hash
+**Implementation:** `/Users/graham/Documents/projects/asset-hash`
 
 ---
 
