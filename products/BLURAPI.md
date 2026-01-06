@@ -1,14 +1,11 @@
-# Shimmer — Blurhash at the Edge
+# blurhash-edge — Blurhash API for Cloudflare Workers
 
 > Zero-dependency blurhash generation running on Cloudflare Workers via WebAssembly.
 > Open source. Self-host for free. No data leaves the edge.
 
 **Status:** Open Source Project Spec
-**Repository name:** `shimmer` or `blurhash-edge`
-**Tagline options:**
-- "Blurhash at the speed of light"
-- "Image placeholders, computed at the edge"
-- "The fastest path from URL to blur"
+**Repository name:** `blurhash-edge`
+**Tagline:** "Self-hosted blurhash API for the edge"
 
 ---
 
@@ -46,7 +43,7 @@ Static site generators, edge-rendered apps, and CDN-first architectures don't ha
 Compile the original C blurhash library to WebAssembly. Deploy it on Cloudflare Workers. Call it from anywhere:
 
 ```bash
-curl "https://shimmer.example.com/blur?url=https://example.com/photo.jpg"
+curl "https://blurhash.example.com/blur?url=https://example.com/photo.jpg"
 # → {"blurhash":"LEHV6nWB2yk8pyo0adR*.7kCMdnj","width":800,"height":600}
 ```
 
@@ -102,20 +99,20 @@ curl "https://shimmer.example.com/blur?url=https://example.com/photo.jpg"
 - Don't want to run a server just for blurhash
 - Need blurhash at build time for static sites
 
-**How Shimmer helps:**
-- `npm install shimmer-client` for type-safe API calls
+**How blurhash-edge helps:**
+- `npm install blurhash-edge-client` for type-safe API calls
 - One-click deploy to their own Cloudflare account
 - Works in any build pipeline (no native deps)
 
 **User flow:**
 ```bash
 # Deploy once (2 minutes)
-git clone https://github.com/you/shimmer
-cd shimmer && npm install
+git clone https://github.com/your-username/blurhash-edge
+cd blurhash-edge && npm install
 npx wrangler deploy
 
 # Use forever
-import { getBlurHash } from 'shimmer-client';
+import { getBlurHash } from 'blurhash-edge-client';
 const blur = await getBlurHash('https://example.com/photo.jpg');
 ```
 
@@ -132,7 +129,7 @@ const blur = await getBlurHash('https://example.com/photo.jpg');
 - Tried blurhash plugins but they're complex
 - Doesn't want ongoing infrastructure
 
-**How Shimmer helps:**
+**How blurhash-edge helps:**
 - Clear step-by-step guide
 - Copy-paste code snippets for their platform
 - "Set and forget" deployment
@@ -156,7 +153,7 @@ const blur = await getBlurHash('https://example.com/photo.jpg');
 - Clients don't want ongoing costs
 - Needs to support across different tech stacks
 
-**How Shimmer helps:**
+**How blurhash-edge helps:**
 - Self-hosted = no vendor risk
 - Free tier handles most client sites
 - Same solution works for React, Vue, vanilla JS
@@ -179,15 +176,15 @@ const blur = await getBlurHash('https://example.com/photo.jpg');
 - Doesn't understand the technical details
 - Needs someone else to do it
 
-**How Shimmer helps:**
-- **Honestly, Shimmer doesn't directly serve this persona.** They need:
+**How blurhash-edge helps:**
+- **Honestly, blurhash-edge doesn't directly serve this persona.** They need:
   - A Shopify app that handles everything
   - A Webflow integration
   - An agency to implement it
 
-**Opportunity:** The Shopify/Webflow apps could be built on top of Shimmer. But Shimmer itself is a developer tool.
+**Opportunity:** Shopify/Webflow apps could be built on top of blurhash-edge. But blurhash-edge itself is a developer tool.
 
-**Realistic path:** They hire a developer who uses Shimmer.
+**Realistic path:** They hire a developer who uses blurhash-edge.
 
 ---
 
@@ -200,7 +197,7 @@ const blur = await getBlurHash('https://example.com/photo.jpg');
 - Unclear how to set up dev environment
 - Don't know where to start
 
-**How Shimmer helps:**
+**How blurhash-edge helps:**
 - Clear CONTRIBUTING.md
 - Simple architecture (Worker + 2 WASM modules)
 - Good first issues labeled
@@ -226,8 +223,8 @@ const blur = await getBlurHash('https://example.com/photo.jpg');
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/shimmer.git
-cd shimmer
+git clone https://github.com/YOUR_USERNAME/blurhash-edge.git
+cd blurhash-edge
 
 # Install dependencies
 npm install
@@ -239,7 +236,7 @@ npx wrangler login
 npx wrangler deploy
 
 # Done! Your endpoint is live at:
-# https://shimmer.<your-subdomain>.workers.dev
+# https://blurhash-edge.<your-subdomain>.workers.dev
 ```
 
 ### Configuration
@@ -247,7 +244,7 @@ npx wrangler deploy
 Create `wrangler.toml`:
 
 ```toml
-name = "shimmer"
+name = "blurhash-edge"
 main = "src/worker.ts"
 compatibility_date = "2024-01-01"
 
@@ -480,7 +477,7 @@ Will the same images be requested multiple times?
 │  ┌─────────────────────────────────────────────────┐           │
 │  │         GitHub Releases                         │           │
 │  │  v1.2.0                                         │           │
-│  │  └── shimmer-worker-v1.2.0.zip                  │           │
+│  │  └── blurhash-edge-v1.2.0.zip                  │           │
 │  └─────────────────────────────────────────────────┘           │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -547,7 +544,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: shimmer-dist
+          name: blurhash-edge-dist
           path: dist/
 ```
 
@@ -596,18 +593,18 @@ curl "http://localhost:8787/blur?url=https://picsum.photos/800/600"
 ### Next.js (App Router)
 
 ```typescript
-// lib/shimmer.ts
-const SHIMMER_URL = process.env.SHIMMER_URL || 'https://shimmer.your-domain.workers.dev';
+// lib/blurhash.ts
+const BLURHASH_EDGE_URL = process.env.BLURHASH_EDGE_URL || 'https://blurhash.your-subdomain.workers.dev';
 
 export async function getBlurHash(imageUrl: string): Promise<string> {
-  const res = await fetch(`${SHIMMER_URL}/blur?url=${encodeURIComponent(imageUrl)}`);
+  const res = await fetch(`${BLURHASH_EDGE_URL}/blur?url=${encodeURIComponent(imageUrl)}`);
   const data = await res.json();
   return data.blurhash;
 }
 
 // components/BlurImage.tsx
 import Image from 'next/image';
-import { getBlurHash } from '@/lib/shimmer';
+import { getBlurHash } from '@/lib/blurhash';
 
 export async function BlurImage({ src, alt, ...props }) {
   const blurHash = await getBlurHash(src);
@@ -630,7 +627,7 @@ export async function BlurImage({ src, alt, ...props }) {
 ```typescript
 // src/utils/blur.ts
 export async function getBlurPlaceholder(src: string) {
-  const res = await fetch(`${import.meta.env.SHIMMER_URL}/blur?url=${encodeURIComponent(src)}`);
+  const res = await fetch(`${import.meta.env.BLURHASH_EDGE_URL}/blur?url=${encodeURIComponent(src)}`);
   return res.json();
 }
 
@@ -667,9 +664,9 @@ const dataUrl = pixelsToDataURL(pixels, 32, 32);
 ```html
 <!-- layouts/shortcodes/blur-image.html -->
 {{ $url := .Get "src" }}
-{{ $shimmerURL := site.Params.shimmerURL }}
+{{ $blurhashURL := site.Params.blurhashEdgeURL }}
 
-{{ $blur := getJSON (printf "%s/blur?url=%s" $shimmerURL (urlquery $url)) }}
+{{ $blur := getJSON (printf "%s/blur?url=%s" $blurhashURL (urlquery $url)) }}
 
 <div class="blur-image" style="aspect-ratio: {{ $blur.width }}/{{ $blur.height }}">
   <img
@@ -688,10 +685,10 @@ import { decode } from 'https://esm.sh/blurhash';
 
 async function loadWithBlur(img) {
   const src = img.dataset.src;
-  const shimmerUrl = 'https://shimmer.your-domain.workers.dev';
+  const apiUrl = 'https://blurhash.your-subdomain.workers.dev';
 
   // Get blurhash
-  const res = await fetch(`${shimmerUrl}/blur?url=${encodeURIComponent(src)}`);
+  const res = await fetch(`${apiUrl}/blur?url=${encodeURIComponent(src)}`);
   const { blurhash, width, height } = await res.json();
 
   // Decode to canvas
@@ -745,7 +742,7 @@ I wanted blur placeholders for my static site without any of that hassle. So I c
 **The result: a free, self-hosted API that generates blurhashes from any image URL.**
 
 ```bash
-curl "https://shimmer.example.com/blur?url=https://example.com/photo.jpg"
+curl "https://blurhash.example.com/blur?url=https://example.com/photo.jpg"
 # → {"blurhash":"LEHV6nWB2yk8pyo0adR*.7kCMdnj","width":800,"height":600}
 ```
 
@@ -804,8 +801,8 @@ export default {
 ### Deploy Your Own
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/shimmer
-cd shimmer
+git clone https://github.com/YOUR_USERNAME/blurhash-edge
+cd blurhash-edge
 npm install
 npx wrangler login
 npx wrangler deploy
@@ -858,19 +855,17 @@ Shimmer lets you add blur placeholders to any website without running a server. 
 
 | Name | Pros | Cons |
 |------|------|------|
-| **Shimmer** | Evocative, describes the visual effect, memorable, good domain availability | Doesn't mention "blur" or "hash" explicitly |
+| **blurhash-edge** | Explicit, SEO-friendly, discoverable by people searching for blurhash solutions | Hyphenated, less "brandable" |
+| **blurhash-worker** | Very explicit about what it is | Even more generic |
+| **Shimmer** | Evocative, describes the visual effect | Doesn't mention "blurhash"—bad for discoverability |
 | **BlurEdge** | Descriptive, implies edge computing | Generic, forgettable |
-| **blurhash-edge** | Explicit, SEO-friendly | Boring, hyphenated |
-| **Haze** | Short, evocative | Could be confused with other projects |
-| **Placeholder** | Descriptive | Too generic |
 | **BlurAPI** | Clear purpose | Generic, says nothing about edge/WASM |
-| **blur.run** | Domain-style, memorable | Requires specific domain |
 
-**Recommendation:** `shimmer` for the brand/repo name, with SEO-optimized description "blurhash at the edge" for discoverability.
+**Recommendation:** `blurhash-edge` — prioritizes discoverability over branding. People searching "blurhash cloudflare" or "blurhash edge" will find it.
 
-Repository: `github.com/YOUR_USERNAME/shimmer`
-npm package: `shimmer-blur` or `@shimmer/edge`
-Worker default subdomain: `shimmer.YOUR_SUBDOMAIN.workers.dev`
+Repository: `github.com/YOUR_USERNAME/blurhash-edge`
+npm package: `blurhash-edge` or `blurhash-edge-client`
+Worker default subdomain: `blurhash-edge.YOUR_SUBDOMAIN.workers.dev`
 
 ---
 
@@ -882,7 +877,7 @@ MIT — Maximum adoption, no friction.
 ### Repository Structure
 
 ```
-shimmer/
+blurhash-edge/
 ├── README.md           # Quick start, badges, deploy button
 ├── CONTRIBUTING.md     # How to contribute
 ├── LICENSE             # MIT
@@ -944,7 +939,7 @@ shimmer/
 
 ## Summary
 
-Shimmer is a viable open source project that:
+blurhash-edge is a viable open source project that:
 
 1. **Solves a real problem** — Blurhash integration is genuinely annoying for static sites
 2. **Has clear value proposition** — Self-host for free, no dependencies, works everywhere
