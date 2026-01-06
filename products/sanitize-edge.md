@@ -1,8 +1,11 @@
 # sanitize-edge
 
-**Type:** API Primitive (Edge)
-**Status:** Spec
+**Type:** API Primitive (Cloudflare Worker)
+**Status:** Built
 **Viability:** ⭐⭐⭐⭐⭐
+
+**Repository:** https://github.com/batzlerg/sanitize-edge
+**Implementation:** `/Users/graham/Documents/projects/sanitize-edge`
 
 ---
 
