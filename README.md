@@ -1,21 +1,45 @@
 # WASM Conversion Research
 
-Deep implementation research for compiling native libraries to WebAssembly for browser-based utilities.
+Deep implementation research for compiling native libraries to WebAssembly. Documents what works, what doesn't, and provides product opportunities.
 
-**Date:** 2026-01-05
+**Last Updated:** January 2026
+**Status:** 13 conversions completed, 34 active prospects, 18 product ideas
 
-## Executive Summary
+---
 
-Researched WASM compilation feasibility for various native libraries. Built two working test harnesses and documented key findings about when WASM compilation makes sense vs. when JavaScript is sufficient.
+## Quick Navigation
 
-### Key Findings
+### 📊 Overview
+- **[EXECUTIVE_SUMMARY.md](EXECUTIVE_SUMMARY.md)** — Project status, key achievements, patterns
 
-| Target | Status | Recommendation |
-|--------|--------|----------------|
-| **FFmpeg.wasm** | ✅ Working | **BUILD** - Pre-built, mature solution |
-| **PEGTL Parser** | ✅ Working | **BUILD** - 136KB binary, fast |
-| **Rust CSV (qsv)** | ⚠️ Research | **SKIP** - JS often faster |
-| **C++ Plotting** | ❌ Skip | **SKIP** - Use JS rendering |
+### 🔬 Library Evaluation
+- **[PROSPECTS.md](PROSPECTS.md)** — Master historical list (everything evaluated)
+- **[ACTIVE_PROSPECTS.md](ACTIVE_PROSPECTS.md)** — What we're pursuing (34 libraries)
+- **[ELIMINATED.md](ELIMINATED.md)** — What we rejected and why (83 libraries)
+- **[LEARNINGS.md](LEARNINGS.md)** — Technical conversion details
+- **[CLAUDE.md](CLAUDE.md)** — Decision tree and workflow
+
+### 💡 Product Ideas
+- **[products/](products/)** — 18 product specs (see [products/README.md](products/README.md))
+  - 5-star: pixel-forge, freq-sense, asset-hash, thumbhash-edge, sanitize-edge
+  - 4-star: wave-shape, math-viz, og-image-edge, readable-edge, minify-edge
+  - 3-star and below: Various exploratory ideas
+
+---
+
+## Key Results
+
+### Completed: 13 Successful Conversions
+
+| Library | Performance | Product Use |
+|---------|-------------|-------------|
+| **DSPFilters** | 13.5x faster | freq-sense, wave-shape |
+| **Eigen/nalgebra** | 7.4x faster | math-viz, physics-box |
+| **xxHash** | 5.87x faster | asset-hash, content APIs |
+| **LZ4** | 6.5 GB/s | compress-kit, archives |
+| **blurhash** | 5k dec/sec | thumbhash-edge (upgraded) |
+
+Full list in [EXECUTIVE_SUMMARY.md](EXECUTIVE_SUMMARY.md)
 
 ## Working Test Harnesses
 

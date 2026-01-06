@@ -7,15 +7,19 @@
 
 ## Project Organization
 
-This research has been reorganized into focused documents:
-
-- **[ELIMINATED.md](ELIMINATED.md)** — 83 libraries we won't pursue (with reasons why)
+### Library Evaluation (Technical)
+- **[PROSPECTS.md](PROSPECTS.md)** — Master historical list of everything evaluated
 - **[ACTIVE_PROSPECTS.md](ACTIVE_PROSPECTS.md)** — 34 viable candidates (13 completed, 21 remaining)
-- **[LEARNINGS.md](LEARNINGS.md)** — Technical details of all 15 conversion attempts
-- **[EDGE_PROSPECTS.md](EDGE_PROSPECTS.md)** — 20 edge-specific candidates evaluated
-- **[PRODUCT_PROSPECTS.md](PRODUCT_PROSPECTS.md)** — Product ideas leveraging conversions
+- **[ELIMINATED.md](ELIMINATED.md)** — 83 libraries rejected (categorized by reason)
+- **[LEARNINGS.md](LEARNINGS.md)** — Technical details of all conversion attempts
 - **[CLAUDE.md](CLAUDE.md)** — Decision tree and workflow guide
-- **[products/thumbhash-edge.md](products/thumbhash-edge.md)** — First edge deployment spec
+
+### Product Ideas (Business)
+- **[products/](products/)** — 18 product specs, each in own file
+  - Standalone Apps (10): pixel-forge, freq-sense, wave-shape, math-viz, etc.
+  - API Primitives (3): thumbhash-edge, sanitize-edge, minify-edge
+  - Pipeline Services (3): og-image-edge, readable-edge, webhook-edge
+  - Developer Libraries (2): asset-hash, audio-dna
 
 ---
 
