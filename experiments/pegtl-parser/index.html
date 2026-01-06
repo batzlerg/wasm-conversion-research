@@ -162,9 +162,9 @@
     </div>
 
     <script type="module">
-        // Load the WASM module
-        const Module = await import('./parser.js');
-        const parser = await Module.default();
+        // Load the WASM module - Emscripten exports a factory function
+        const createModule = (await import('./parser.js')).default;
+        const parser = await createModule();
 
         const statusEl = document.getElementById('status');
         const inputEl = document.getElementById('input');
@@ -214,7 +214,17 @@
         function doParse() {
             const input = inputEl.value;
             const start = performance.now();
-            const result = parser.parseExpression(input);
+            let result;
+
+            try {
+                result = parser.parseExpression(input);
+            } catch (e) {
+                // Handle raw C++ exception pointers (numbers) or other errors
+                result = typeof e === 'number'
+                    ? `ERROR: C++ exception (ptr: ${e}) - compile with -fexceptions`
+                    : `ERROR: ${e}`;
+            }
+
             const elapsed = performance.now() - start;
 
             resultEl.style.display = 'block';
@@ -232,7 +242,7 @@
 
             resultEl.textContent = result;
             document.getElementById('parseTime').textContent = elapsed.toFixed(2) + 'ms';
-            document.getElementById('wasmSize').textContent = '136KB';
+            document.getElementById('wasmSize').textContent = '176KB';
             statsEl.style.display = 'grid';
         }
 
