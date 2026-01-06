@@ -227,9 +227,36 @@ Libraries specifically suitable for Cloudflare Workers deployment.
 
 ---
 
-## Research Needed (Validate Before Committing)
+---
 
-These look promising but need investigation before conversion.
+## Missing Building Blocks (Research Needed)
+
+Libraries identified as valuable for pipeline products but not yet evaluated for WASM conversion.
+
+### Content Processing (For readable-edge, LLM prep)
+
+| Library | Purpose | Why Needed | Priority |
+|---------|---------|------------|----------|
+| **html2md** (Rust crate) | HTML→Markdown | LLM content prep, token reduction | High |
+| **readability-rs** | Article extraction | Clean content from noisy pages | High |
+| **scraper** (Rust) | HTML parsing/DOM querying | Extract specific elements | Medium |
+| **Open Graph parser** | Extract OG meta tags | Metadata extraction APIs | Medium |
+
+**Action:** Research if these exist in Rust/can compile to WASM, or use JS alternatives.
+
+### Validation & Security (For webhook-edge, API gateways)
+
+| Library | Purpose | Why Needed | Priority |
+|---------|---------|------------|----------|
+| **jose** (JWT) | Webhook signature verification | Security validation | Medium |
+| **jsonschema** | JSON Schema validation | API request validation | Medium |
+| **semver** | Version parsing/comparison | API version routing | Low |
+
+**Action:** Check if Rust versions work at edge, or if JS libraries (jose, Ajv) are sufficient.
+
+---
+
+## Research Needed (Validate Before Committing)
 
 ### ML/AI (Check Model Size Constraints)
 
