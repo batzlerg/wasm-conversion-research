@@ -1,0 +1,1 @@
+/Users/graham/Documents/projects/wasm-conversion-research/experiments/nalgebra/target/wasm32-unknown-unknown/release/libnalgebra_wasm.rlib: /Users/graham/Documents/projects/wasm-conversion-research/experiments/nalgebra/src/lib.rs
