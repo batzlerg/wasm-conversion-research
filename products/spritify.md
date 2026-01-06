@@ -1,4 +1,4 @@
-# PixelPerfect
+# Spritify
 
 **Type:** Standalone App (Browser)
 **Status:** Spec

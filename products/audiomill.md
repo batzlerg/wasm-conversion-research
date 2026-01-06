@@ -1,4 +1,4 @@
-# SoundSculpt
+# Audiomill
 
 **Type:** Standalone App (Browser)
 **Status:** Spec
@@ -69,7 +69,7 @@ One-purpose audio processor with presets:
 
 ## Novel Angle
 
-Full DAWs are overwhelming for "just clean up my podcast." Simple editors lack professional effects. Adobe Podcast uses AI but requires cloud processing. SoundSculpt offers "Instagram filter" simplicity with professional DSP quality, all running locally.
+Full DAWs are overwhelming for "just clean up my podcast." Simple editors lack professional effects. Adobe Podcast uses AI but requires cloud processing. Audiomill offers "Instagram filter" simplicity with professional DSP quality, all running locally.
 
 The 119M samples/sec throughput means effects apply in near-real-time.
 

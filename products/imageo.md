@@ -1,4 +1,4 @@
-# PixelForge
+# Imageo
 
 **Type:** Standalone App (Browser)
 **Status:** Spec
@@ -77,7 +77,7 @@ Offline-first batch image processor:
 
 ## Novel Angle
 
-Unlike Squoosh (single image) or TinyPNG (cloud upload), PixelForge combines:
+Unlike Squoosh (single image) or TinyPNG (cloud upload), Imageo combines:
 - Batch processing (Squoosh's #1 feature request)
 - Automatic placeholder generation (framework integration ready)
 - Content-addressable organization (deduplication built-in)

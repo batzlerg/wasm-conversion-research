@@ -1,4 +1,4 @@
-# CompressKit
+# Mosaicly
 
 **Type:** Standalone App (Browser)
 **Status:** Spec
@@ -67,7 +67,7 @@ Local-first file compression:
 
 ## Novel Angle
 
-7-Zip and WinRAR are desktop apps. Online compression tools upload your data. CompressKit is "7-Zip in your browser"—no installation, no upload, works on Chromebooks.
+7-Zip and WinRAR are desktop apps. Online compression tools upload your data. Mosaicly is "7-Zip in your browser"—no installation, no upload, works on Chromebooks.
 
 The 6.5 GB/s LZ4 throughput means even large files compress quickly.
 

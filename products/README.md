@@ -20,7 +20,7 @@ Product concepts derived from WASM conversion research. Each idea gets its own s
 | Name | Type | Status | Viability | Revenue Model |
 |------|------|--------|-----------|---------------|
 | [thumbhash-edge](thumbhash-edge.md) | API Primitive | Spec | ⭐⭐⭐⭐⭐ | Free (OSS self-host) |
-| [pixel-forge](pixel-forge.md) | Standalone App | Spec | ⭐⭐⭐⭐⭐ | Freemium ($9/mo) |
+| [imageo](imageo.md) | Standalone App | Spec | ⭐⭐⭐⭐⭐ | Freemium ($9/mo) |
 | [freq-sense](freq-sense.md) | Standalone App | Spec | ⭐⭐⭐⭐⭐ | Subscription ($7/mo) |
 | [asset-hash](asset-hash.md) | Developer Library | Spec | ⭐⭐⭐⭐⭐ | OSS (consulting funnel) |
 | [og-image-edge](og-image-edge.md) | Pipeline Service | Spec | ⭐⭐⭐⭐ | SaaS ($15/mo) |
@@ -30,10 +30,10 @@ Product concepts derived from WASM conversion research. Each idea gets its own s
 | [wave-shape](wave-shape.md) | Standalone App | Spec | ⭐⭐⭐⭐ | Freemium ($5/mo) |
 | [math-viz](math-viz.md) | Standalone App | Spec | ⭐⭐⭐⭐ | Edu licensing ($99/yr) |
 | [webhook-edge](webhook-edge.md) | Pipeline Service | Spec | ⭐⭐⭐ | Pay-per-use ($0.20/1k) |
-| [sound-sculpt](sound-sculpt.md) | Standalone App | Spec | ⭐⭐⭐ | Freemium ($8/mo) |
-| [compress-kit](compress-kit.md) | Standalone App | Spec | ⭐⭐⭐ | Free (OSS) |
+| [audiomill](audiomill.md) | Standalone App | Spec | ⭐⭐⭐ | Freemium ($8/mo) |
+| [mosaicly](mosaicly.md) | Standalone App | Spec | ⭐⭐⭐ | Free (OSS) |
 | [parser-lab](parser-lab.md) | Standalone App | Spec | ⭐⭐⭐ | OSS (reputation) |
-| [pixel-perfect](pixel-perfect.md) | Standalone App | Spec | ⭐⭐ | One-time ($19) |
+| [spritify](spritify.md) | Standalone App | Spec | ⭐⭐ | One-time ($19) |
 | [physics-box](physics-box.md) | Standalone App | Spec | ⭐⭐ | Institutional ($500/yr) |
 | [hash-vault](hash-vault.md) | Standalone App | Spec | ⭐⭐ | OSS |
 | [audio-dna](audio-dna.md) | Developer Library | Spec | ⭐ | Open core |
@@ -44,14 +44,14 @@ Product concepts derived from WASM conversion research. Each idea gets its own s
 
 ### Standalone Apps (7)
 Full browser applications with UI:
-- [pixel-forge](pixel-forge.md) ⭐⭐⭐⭐⭐
+- [imageo](imageo.md) ⭐⭐⭐⭐⭐
 - [freq-sense](freq-sense.md) ⭐⭐⭐⭐⭐
 - [wave-shape](wave-shape.md) ⭐⭐⭐⭐
 - [math-viz](math-viz.md) ⭐⭐⭐⭐
-- [sound-sculpt](sound-sculpt.md) ⭐⭐⭐
-- [compress-kit](compress-kit.md) ⭐⭐⭐
+- [audiomill](audiomill.md) ⭐⭐⭐
+- [mosaicly](mosaicly.md) ⭐⭐⭐
 - [parser-lab](parser-lab.md) ⭐⭐⭐
-- [pixel-perfect](pixel-perfect.md) ⭐⭐
+- [spritify](spritify.md) ⭐⭐
 - [physics-box](physics-box.md) ⭐⭐
 - [hash-vault](hash-vault.md) ⭐⭐
 
@@ -77,7 +77,7 @@ Embeddable packages:
 ## By Viability
 
 ### ⭐⭐⭐⭐⭐ Highest Priority
-- pixel-forge (batch image, privacy angle)
+- imageo (batch image, privacy angle)
 - freq-sense (proven subscription model)
 - asset-hash (dev tool, low CAC)
 - thumbhash-edge (real demand, portfolio value)
@@ -92,12 +92,12 @@ Embeddable packages:
 
 ### ⭐⭐⭐ Medium Priority
 - webhook-edge (useful but niche)
-- sound-sculpt (crowded market)
-- compress-kit (utility, OSS)
+- audiomill (crowded market)
+- mosaicly (utility, OSS)
 - parser-lab (niche, education)
 
 ### ⭐⭐ Low Priority
-- pixel-perfect (very niche, QOI adoption unclear)
+- spritify (very niche, QOI adoption unclear)
 - physics-box (PhET dominates)
 - hash-vault (wrong platform)
 
@@ -138,7 +138,7 @@ Embeddable packages:
 6. Test bundle hypothesis
 
 ### Browser products (longer-term)
-7. Prototype PixelForge MVP
+7. Prototype Imageo MVP
 8. Prototype FreqSense MVP
 9. Validate revenue assumptions
 
