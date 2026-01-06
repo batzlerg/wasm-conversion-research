@@ -1,0 +1,1 @@
+/Users/graham/Documents/projects/wasm-conversion-research/experiments/image-rs/target/wasm32-unknown-unknown/release/image_rs_wasm.wasm: /Users/graham/Documents/projects/wasm-conversion-research/experiments/image-rs/src/lib.rs
