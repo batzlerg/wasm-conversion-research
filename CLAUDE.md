@@ -48,6 +48,54 @@ Why WASM can be slower:
 
 ---
 
+## Pre-Conversion Decision Tree
+
+**Use this before attempting any WASM conversion to avoid wasted effort.**
+
+Based on 13 conversion experiments, apply these filters in order:
+
+### 🚫 Stop Immediately If:
+
+1. **Interprets a domain-specific language** (DSL)
+   - Examples: jq (115x slower), SQL engines, expression evaluators, template engines
+   - Why: Parsing overhead + frequent boundary crossing
+
+2. **Parses text format with V8 native equivalent**
+   - Examples: JSON (simdjson 30% slower), CSV, YAML, XML
+   - Why: V8's native parsers are compiled C++ without WASM boundary overhead
+
+3. **Performance relies on SIMD instructions**
+   - Examples: Libraries requiring AVX2/SSE without scalar fallback
+   - Why: WASM SIMD support incomplete, falls back to slow scalar code
+
+4. **Primarily string manipulation**
+   - Examples: Text editors, log parsers, regex (when JS RegExp sufficient)
+   - Why: UTF-8↔UTF-16 conversion + V8 string optimizations beat WASM
+
+5. **Pre-built WASM exists and is maintained**
+   - Examples: tesseract.js, ffmpeg.wasm, opencv.js, duckdb-wasm
+   - Why: Use existing solutions, avoid days of dependency wrangling
+
+### ✅ Proceed If 3+ Are True:
+
+- [ ] **Pure computation** - Math, crypto, compression, DSP (11/13 successes were this)
+- [ ] **Binary data processing** - Images, audio, video (no string conversion)
+- [ ] **Header-only or single-file** - Easy compilation, low risk
+- [ ] **No adequate JS alternative** - Filling a real performance gap
+- [ ] **Porting existing C/C++/Rust** - Don't rewrite from scratch
+
+### 📊 Evidence from Experiments:
+
+| Pattern | Success Rate | Avg Speedup | Examples |
+|---------|--------------|-------------|----------|
+| Pure computation | 11/11 | 7.2x | DSPFilters (13.5x), Eigen (7.4x), xxHash (5.87x) |
+| Binary data | 6/6 | 4.5x | blurhash, stb_image, LZ4, Snappy |
+| Interpreters/DSL | 0/1 | 0.008x | jq (115x slower) |
+| Text parsers | 0/1 | 0.7x | simdjson (30% slower than JSON.parse) |
+| Pre-built available | N/A | N/A | tesseract (just use tesseract.js) |
+
+---
+
 ## Emscripten Compilation Guide
 
 ### Minimum Viable Compilation
