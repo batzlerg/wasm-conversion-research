@@ -52,7 +52,58 @@ Why WASM can be slower:
 
 **Apply BEFORE technical evaluation to avoid building commoditized or unnecessary products.**
 
-### Phase 1: Market Validation (CRITICAL - Check First)
+### Phase 0: WASM Value Validation (CRITICAL - Check FIRST)
+
+**WASM must add value through ONE of these three mechanisms. If none apply, don't build it.**
+
+#### 1. Novel Access - Makes Library Usable in Browser
+
+**What it means:** Library wasn't accessible in browser before, WASM makes it available.
+
+**Examples:**
+- ✅ FFmpeg.wasm - Video editing in browser (FFmpeg was C++ CLI only)
+- ✅ ammonia WASM - HTML sanitization in browser (ammonia was Rust library)
+- ✅ DuckDB-wasm - SQL database in browser (DuckDB was C++ library)
+- ✅ tesseract.js - OCR in browser (Tesseract was C++ library)
+
+**Test:** "Can users do something in browser that was impossible before?"
+
+**Anti-examples:**
+- ❌ JSON parser WASM (JSON.parse already exists in browser)
+- ❌ CSV parser WASM (PapaParse already works in browser)
+
+#### 2. Performance Advantage - Measurably Faster Than JS
+
+**What it means:** Benchmarked against best-in-class JS alternative, WASM is significantly faster (2x+).
+
+**Examples:**
+- ✅ xxHash WASM - 5.87x faster than JS hashing
+- ✅ DSPFilters WASM - 13.5x faster than JS audio processing
+- ✅ Image compression WASM - 3-5x faster than JS
+
+**Test:** "Did we benchmark against best-in-class JS library?"
+
+**Anti-examples:**
+- ❌ jq WASM - 115x SLOWER than JS equivalent (failed benchmark)
+- ❌ simdjson WASM - 30% slower than JSON.parse (failed benchmark)
+
+#### 3. Unique Code - Substantial Differentiation Built Around WASM
+
+**What it means:** 10+ hours of unique code/UX built on top of WASM library, creating new value.
+
+**Examples:**
+- ✅ wave-shape - Modular synth UI + routing + patch management (WASM DSP is internal)
+- ✅ freq-sense - Gamified progression + spaced repetition + UI (WASM generates test tones)
+
+**Test:** "Is there significant unique code beyond the WASM wrapper?"
+
+**Anti-examples:**
+- ❌ Thin WASM wrapper with no unique UI/features
+- ❌ Generic tool that just exposes WASM API
+
+---
+
+### Phase 1: Market Validation (Check After Phase 0)
 
 Apply these filters before any technical work:
 
