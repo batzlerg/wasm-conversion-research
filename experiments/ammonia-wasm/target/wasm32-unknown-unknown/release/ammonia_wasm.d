@@ -1,0 +1,1 @@
+/Users/graham/Documents/projects/wasm-conversion-research/experiments/ammonia-wasm/target/wasm32-unknown-unknown/release/ammonia_wasm.wasm: /Users/graham/Documents/projects/wasm-conversion-research/experiments/ammonia-wasm/src/lib.rs

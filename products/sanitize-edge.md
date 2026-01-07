@@ -1,14 +1,19 @@
 # sanitize-edge
 
 **Type:** API Primitive (Cloudflare Worker)
-**Status:** ⚠️ **DEPLOYED (Runtime Errors)**
-**Viability:** ⭐⭐⭐⭐⭐
+**Status:** ⛔ **BLOCKED - WASM Integration Incompatibility**
+**Viability:** ⭐⭐⭐⭐⭐ (if blocker resolved)
 
 **Repository:** https://github.com/batzlerg/sanitize-edge
 **Implementation:** `/Users/graham/Documents/projects/sanitize-edge`
-**Live URL:** https://sanitize-edge.grahammakes.workers.dev/
+**Live URL:** https://sanitize-edge.grahammakes.workers.dev/ (non-functional)
 **Deployed:** 2026-01-06
-**Known Issue:** "import_isomorphic_dompurify.default.sanitize is not a function" - DOMPurify import incompatibility with Workers
+
+**Blocker:** wasm-bindgen incompatible with Cloudflare Workers runtime
+- **Original Issue:** DOMPurify requires DOM APIs not available in Workers
+- **Attempted Fix:** Built custom ammonia WASM bindings (✅ compilation successful, 278 KB gzipped)
+- **Integration Blocker:** wasm-bindgen uses `__wbindgen_start()` which Workers doesn't support
+- **Documentation:** `/experiments/ammonia-wasm/BLOCKERS.md`
 
 ---
 
@@ -35,9 +40,14 @@ Runs at edge (low latency), no DOM required, security-critical operation happens
 ## Modules Used
 
 - [ammonia](../EDGE_PROSPECTS.md#ammonia) (~200KB) — Rust HTML sanitizer, 15x faster than Python bleach
-- Requires: stb_image NOT needed, ammonia is standalone
+  - ✅ **Successfully compiled to WASM** (278 KB gzipped)
+  - ⛔ **Blocked:** wasm-bindgen incompatible with Cloudflare Workers
+  - Whitelist-based (no regex, parses with html5ever)
+  - Claims 10x faster than DOMPurify
+  - Zero dependencies after compilation
 
-**Note:** ammonia needs WASM compilation. Bindings exist: [ammonia-wasm](https://github.com/lucacasonato/ammonia-wasm)
+**WASM Conversion Status:** Compilation successful, integration blocked
+**See:** `/experiments/ammonia-wasm/BLOCKERS.md` for detailed analysis
 
 ## Target Users
 

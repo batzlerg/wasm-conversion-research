@@ -76,6 +76,13 @@ Based on 13 conversion experiments, apply these filters in order:
    - Examples: tesseract.js, ffmpeg.wasm, opencv.js, duckdb-wasm
    - Why: Use existing solutions, avoid days of dependency wrangling
 
+6. **Target is Cloudflare Workers AND library requires wasm-bindgen**
+   - Examples: Rust libraries compiled with wasm-pack (ammonia, etc.)
+   - Why: wasm-bindgen uses `__wbindgen_start()` which Workers runtime doesn't support
+   - Alternatives: Use workers-rs (full Rust worker) or manual WebAssembly.instantiate()
+   - Evidence: ammonia WASM compiled successfully (278 KB) but can't integrate with Workers
+   - See: `/experiments/ammonia-wasm/BLOCKERS.md`
+
 ### ✅ Proceed If 3+ Are True:
 
 - [ ] **Pure computation** - Math, crypto, compression, DSP (11/13 successes were this)
