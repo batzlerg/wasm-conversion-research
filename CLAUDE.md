@@ -78,6 +78,17 @@ Apply these filters before any technical work:
    - Test: "What's the novel contribution?" - if answer is "it exists", stop
    - Why: Novelty comes from WASM enablement, new UX, or unique integrations
 
+5. **Technology showcase with no use case**
+   - Examples: "Built to show off WASM compilation," generic tools with domain-specific alternatives
+   - Test: "Do I have a real use case, or am I building to showcase technology?"
+   - Why: Technology showcase ≠ viable product
+   - Anti-pattern: parser-lab (JSONLint/SQLFiddle/regex101 dominate; no real use case)
+
+6. **Domain-specific alternatives dominate**
+   - Examples: Generic validator vs JSONLint (JSON), SQLFiddle (SQL), regex101 (regex)
+   - Test: "Do specialized tools exist for each use case this covers?"
+   - Why: Domain-specific tools beat generic tools in UX, features, community
+
 #### ✅ PROCEED if 2+ of these are true:
 
 - [ ] **Gap in market** - No adequate solution exists or all solutions have major flaws

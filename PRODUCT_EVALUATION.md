@@ -15,7 +15,7 @@
 - Commoditized markets with no differentiation
 - Lack of novel WASM angle
 
-**Products Worth Building:** 3 of 10 remaining products pass validation.
+**Products Worth Building:** 2 of 10 remaining products pass validation.
 
 ---
 
@@ -78,16 +78,16 @@
 
 ## Phase 5: Static Sites
 
-### parser-lab ⚠️ APPROVED WITH PIVOT
+### parser-lab ❌ REJECT
 
 **Market Validation:**
-- ✅ Gap in market: Existing tools ([Peggy playground](https://pegjs.org/online)) are basic web forms
-- ✅ Novel UX: Interactive workbench vs one-shot test
-- ⚠️ WASM angle: PEGTL requires C++ template syntax (FAILED UX validation)
-- ✅ Real problem: Developers building parsers need iteration environment
-- ✅ Connective tissue: Grammar editor + test runner + parse tree viz + shareable URLs
+- ❌ Existing validators dominate: JSONLint, SQLFiddle, regex101
+- ❌ Domain-specific validators are better than generic tools
+- ❌ No novel value: "Multiple validators in one site" is not differentiation
+- ❌ No real use case: Built to showcase WASM, not to solve a problem
+- ❌ Peggy playground exists: Basic but adequate for grammar development
 
-**CRITICAL UX ISSUE DISCOVERED:**
+**CRITICAL UX ISSUE DISCOVERED (led to pivot):**
 
 PEGTL (C++) uses hostile syntax:
 ```cpp
@@ -108,26 +108,17 @@ Char = [^"\\] / '\\' .
 - ❌ JS alternative has better DX (Peggy is easier)
 - ❌ WASM doesn't enable new UX (just makes existing playground faster)
 
-**REQUIRED PIVOT:**
+**Pivot Attempted:** Switch from PEGTL (C++) to Peggy (JS)
 
-**Use Peggy (JavaScript PEG) instead of PEGTL:**
-- ✅ Compatible with 1000+ existing grammars
-- ✅ Familiar syntax (everyone knows PEG.js/Peggy)
-- ✅ Already runs in browser (no WASM compilation needed for MVP)
-- ✅ Massive ecosystem
+**Market Validation FAILED After Pivot:**
+- Existing domain-specific validators are better than generic tool
+- JSONLint for JSON, SQLFiddle for SQL, regex101 for regex
+- No novel value beyond "combining existing validators"
+- No real use case: "came about by researching wasm compilation and looking for projects to show off compiled modules"
 
-**WASM Value (Optional, Later):**
-1. Tree-sitter support (programming language grammars, via WASM)
-2. AOT compilation (compile Peggy grammars to WASM for 10x speed)
-3. Advanced features (fast syntax highlighting, parse tree diffing)
+**User Decision:** "I don't have a use case... if there's no interesting novel project here, shelve and archive it"
 
-**Revised Novel Contributions:**
-1. **Developer workflow**: localStorage, test suites, visual debugging
-2. **Not WASM showcase**: Peggy (JS) is the backend, WASM optional
-3. **Educational**: Visual parse tree, step-through debugging
-4. **Shareable**: URL-encoded grammars + tests
-
-**Verdict:** Build with Peggy backend. Add WASM later if needed (Tree-sitter, performance).
+**Verdict:** Reject. Built to showcase technology, not solve real problem. Domain-specific validators dominate.
 
 ---
 
@@ -329,11 +320,8 @@ Char = [^"\\] / '\\' .
 
 | Product | Type | Novel Angle | Market Gap | WASM Role | Priority |
 |---------|------|-------------|------------|-----------|----------|
-| **parser-lab** | Static Site | Peggy + developer workflow | No good grammar workbench | Optional (Tree-sitter later) | HIGH |
 | **wave-shape** | Static Site | Browser modular synth + WASM DSP | No browser-based VCV Rack | Core (WASM DSP modules) | HIGH |
 | **freq-sense** | Static Site | Gamified ear training + WASM DSP | Free ear training sucks | Core (test tone generation) | MEDIUM |
-
-**Note:** parser-lab pivoted from PEGTL (C++) to Peggy (JS) after UX validation failure. WASM is optional for v1.
 
 ---
 
@@ -354,6 +342,7 @@ Char = [^"\\] / '\\' .
 | Product | Reason |
 |---------|--------|
 | **hash-vault** | fclones is best-in-class, highly optimized |
+| **parser-lab** | Domain-specific validators dominate (JSONLint, SQLFiddle); no real use case |
 | **audiomill** | Adobe Podcast (free) beats us |
 | **spritify** | Aseprite dominates, Piskel is free |
 
@@ -361,23 +350,22 @@ Char = [^"\\] / '\\' .
 
 ## Recommended Build Order
 
-### Immediate Next Build: parser-lab
+### Immediate Next Build: wave-shape
 
 **Why:**
-1. ✅ Fills real gap (no good grammar workbench)
-2. ✅ Novel WASM showcase (PEGTL C++ in browser)
-3. ✅ Validates Astro + WASM pattern (needed for all future web apps)
-4. ✅ Educational value (learn PEG grammars)
-5. ✅ Fully automatable (minimal UI decisions)
+1. ✅ Fills real gap (no browser-based modular synth like VCV Rack)
+2. ✅ Novel WASM showcase (DSP audio processing in browser)
+3. ✅ Validates Astro + WASM + Web Audio API pattern
+4. ✅ Educational value (learn synthesis)
+5. ✅ High-quality implementation differentiator
 
-**Timeline:** 40-60 hours (BUILD_ORDER.md estimate)
+**Timeline:** 60-80 hours (BUILD_ORDER.md estimate)
 
 ---
 
-### Follow-Up Builds (In Order):
+### Follow-Up Build:
 
-1. **wave-shape** (modular synth) - Real gap, WASM DSP showcase
-2. **freq-sense** (ear training) - Real gap, educational value
+1. **freq-sense** (ear training) - Real gap, educational value, WASM DSP
 
 **Deferred Pending Pivot:**
 - og-image-edge (if adding template marketplace)
@@ -396,7 +384,7 @@ Char = [^"\\] / '\\' .
 3. **Market saturation** - Assumed all problems need solving
 4. **USER EXPERIENCE VALIDATION** - Never checked if WASM library has usable syntax
 
-### Critical Failure: parser-lab PEGTL Assumption
+### Critical Failure #1: parser-lab PEGTL Assumption (UX Validation Failure)
 
 **What Happened:**
 - Assumed PEGTL (C++ parser) → WASM = viable product
@@ -421,6 +409,47 @@ Char = [^"\\] / '\\' .
 - ✅ Compare JS alternative DX before committing to WASM
 - ✅ Ask "what does WASM enable?" before assuming it's needed
 
+---
+
+### Critical Failure #2: parser-lab Market Validation (After Pivot)
+
+**What Happened:**
+- Pivoted from PEGTL → Peggy to fix UX issue
+- Never validated that generic grammar workbench adds value
+- Never compared to existing domain-specific validators
+- Assumed "grammar workbench" = novel product
+- Built to showcase technology, not solve real problem
+
+**User Feedback:**
+> "I don't have a use case this came about by researching wasm compilation and looking for projects to show off compiled modules"
+
+**Why This Matters:**
+- No real use case = no users
+- Domain-specific validators (JSONLint, SQLFiddle, regex101) dominate
+- "Multiple validators in one site" is not differentiation
+- Technology showcase ≠ viable product
+
+**Why Decision Tree Failed:**
+1. **"Technology looking for problem"** - Inverted priority (built because WASM exists, not because problem exists)
+2. **Skipped domain-specific validator research** - Never searched for JSONLint, SQLFiddle equivalents
+3. **Assumed generic > specific** - Wrong assumption; domain-specific tools win
+4. **No use case validation** - Never asked "who needs this weekly?"
+
+**What Should Have Caught This:**
+- ❌ Phase 1 rule: "Who encounters this problem weekly?" (Answer: nobody)
+- ❌ Phase 1 rule: "What makes this better than X?" (Answer: nothing)
+- ❌ Phase 1 rule: "Gap in market" (No gap - domain validators exist)
+- ❌ Common sense: "Do I have a use case for this?" (Answer: no)
+
+**Fix Applied:**
+- ✅ Added explicit rejection rule: **"Don't build to showcase technology - build to solve real problems"**
+- ✅ New validation question: **"Does a real use case exist, or is this a solution looking for a problem?"**
+- ✅ New rule: **"Domain-specific tools beat generic tools"** - check if specialized validators exist
+- ✅ Document in CLAUDE.md as critical anti-pattern
+
+**Key Learning:**
+> "If the only reason to build is 'because we can compile it to WASM,' don't build it."
+
 ### Updated Evaluation Process (3 Phases):
 
 **Phase 1: Market Validation**
@@ -441,14 +470,18 @@ Char = [^"\\] / '\\' .
 ### New Rules:
 
 1. **"If the best answer to 'why build this?' is 'because we can,' don't build it."**
-2. **"If WASM makes UX worse, don't use WASM."** (NEW)
-3. **"Always compare to best-in-class JS alternative before using WASM."** (NEW)
+2. **"If WASM makes UX worse, don't use WASM."** (NEW after failure #1)
+3. **"Always compare to best-in-class JS alternative before using WASM."** (NEW after failure #1)
+4. **"Don't build to showcase technology - build to solve real problems."** (NEW after failure #2)
+5. **"Domain-specific tools beat generic tools."** (NEW after failure #2)
+6. **"Validate use case exists before building."** (NEW after failure #2)
 
 Build things that are:
 - Novel (WASM enables something new)
 - Needed (real problem, no great solution)
 - Differentiated (not commodity)
 - **Usable (good DX, not hostile syntax)** (NEW)
+- **Solving real problem (not technology showcase)** (NEW)
 
 ---
 
@@ -456,14 +489,14 @@ Build things that are:
 
 1. ✅ Update CLAUDE.md with market validation framework
 2. ✅ Document evaluation of all remaining products
-3. ⏭️ Build parser-lab (Phase 5, approved)
+3. ✅ Document parser-lab rejection (second market validation failure)
 4. ⏭️ Build wave-shape (Phase 6, approved)
 5. ⏭️ Build freq-sense (Phase 6, approved)
 
-**Total Viable Products:** 3 of 10 remaining (30% pass rate)
+**Total Viable Products:** 2 of 10 remaining (20% pass rate)
 
-**Products to Skip:** 4 rejected, 3 weak (need pivot)
+**Products to Skip:** 5 rejected, 3 weak (need pivot)
 
 ---
 
-**Conclusion:** Market validation filter is critical. Most products failed not on technical grounds but on market viability. Focus on the 3 approved products that have real gaps, novel angles, and WASM differentiation.
+**Conclusion:** Market validation filter is critical. Most products failed not on technical grounds but on market viability. Two critical failures (hash-vault commoditization, parser-lab no use case) reinforced importance of validating problem exists before building. Focus on the 2 approved products that have real gaps, novel angles, and WASM differentiation.
