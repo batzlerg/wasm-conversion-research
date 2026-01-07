@@ -78,29 +78,56 @@
 
 ## Phase 5: Static Sites
 
-### parser-lab ✅ APPROVED
+### parser-lab ⚠️ APPROVED WITH PIVOT
 
 **Market Validation:**
 - ✅ Gap in market: Existing tools ([Peggy playground](https://pegjs.org/online)) are basic web forms
 - ✅ Novel UX: Interactive workbench vs one-shot test
-- ✅ WASM angle: PEGTL (C++) in browser, demonstrates WASM capability
+- ⚠️ WASM angle: PEGTL requires C++ template syntax (FAILED UX validation)
 - ✅ Real problem: Developers building parsers need iteration environment
 - ✅ Connective tissue: Grammar editor + test runner + parse tree viz + shareable URLs
 
-**What's Missing from Existing Tools:**
-- No localStorage persistence (lose work on refresh)
-- No grammar library (can't save/load grammars)
-- No test case management (manual copy-paste)
-- No visual parse tree
-- No shareable URLs (can't share grammar + test cases)
+**CRITICAL UX ISSUE DISCOVERED:**
 
-**Novel Contributions:**
-1. **WASM showcase**: PEGTL (C++ parser) running in browser
-2. **Developer workflow**: Save grammars, manage test suites, iterate
-3. **Educational**: Visual parse tree helps learn PEG grammars
-4. **Shareable**: URL-encoded grammar + tests (like playground.rust-lang.org)
+PEGTL (C++) uses hostile syntax:
+```cpp
+// PEGTL C++ template syntax
+struct string : seq< one< '"' >, star< sor< utf8::not_one< '"', '\\' >,
+                     seq< one< '\\' >, any > > >, one< '"' > > {};
+```
 
-**Verdict:** Build this. Fills real gap, demonstrates WASM + Astro pattern.
+Peggy (JS) uses friendly syntax:
+```javascript
+// Peggy familiar PEG syntax
+String = '"' chars:Char* '"'
+Char = [^"\\] / '\\' .
+```
+
+**User Experience Validation FAILED:**
+- ❌ User-facing syntax is hostile (C++ templates)
+- ❌ JS alternative has better DX (Peggy is easier)
+- ❌ WASM doesn't enable new UX (just makes existing playground faster)
+
+**REQUIRED PIVOT:**
+
+**Use Peggy (JavaScript PEG) instead of PEGTL:**
+- ✅ Compatible with 1000+ existing grammars
+- ✅ Familiar syntax (everyone knows PEG.js/Peggy)
+- ✅ Already runs in browser (no WASM compilation needed for MVP)
+- ✅ Massive ecosystem
+
+**WASM Value (Optional, Later):**
+1. Tree-sitter support (programming language grammars, via WASM)
+2. AOT compilation (compile Peggy grammars to WASM for 10x speed)
+3. Advanced features (fast syntax highlighting, parse tree diffing)
+
+**Revised Novel Contributions:**
+1. **Developer workflow**: localStorage, test suites, visual debugging
+2. **Not WASM showcase**: Peggy (JS) is the backend, WASM optional
+3. **Educational**: Visual parse tree, step-through debugging
+4. **Shareable**: URL-encoded grammars + tests
+
+**Verdict:** Build with Peggy backend. Add WASM later if needed (Tree-sitter, performance).
 
 ---
 
@@ -300,11 +327,13 @@
 
 ### ✅ APPROVED (Build These)
 
-| Product | Type | Novel Angle | Market Gap | Priority |
-|---------|------|-------------|------------|----------|
-| **parser-lab** | Static Site | PEGTL WASM + developer workflow | No good grammar workbench | HIGH |
-| **wave-shape** | Static Site | Browser modular synth + WASM DSP | No browser-based VCV Rack | HIGH |
-| **freq-sense** | Static Site | Gamified ear training + WASM DSP | Free ear training sucks | MEDIUM |
+| Product | Type | Novel Angle | Market Gap | WASM Role | Priority |
+|---------|------|-------------|------------|-----------|----------|
+| **parser-lab** | Static Site | Peggy + developer workflow | No good grammar workbench | Optional (Tree-sitter later) | HIGH |
+| **wave-shape** | Static Site | Browser modular synth + WASM DSP | No browser-based VCV Rack | Core (WASM DSP modules) | HIGH |
+| **freq-sense** | Static Site | Gamified ear training + WASM DSP | Free ear training sucks | Core (test tone generation) | MEDIUM |
+
+**Note:** parser-lab pivoted from PEGTL (C++) to Peggy (JS) after UX validation failure. WASM is optional for v1.
 
 ---
 
@@ -365,27 +394,61 @@
 1. **Commoditized market risk** - Never evaluated if best-in-class solutions exist
 2. **Novel angle requirement** - Didn't ask "what makes this unique?"
 3. **Market saturation** - Assumed all problems need solving
+4. **USER EXPERIENCE VALIDATION** - Never checked if WASM library has usable syntax
 
-### Updated Evaluation Process:
+### Critical Failure: parser-lab PEGTL Assumption
 
-**Phase 1: Market Validation (NEW)**
+**What Happened:**
+- Assumed PEGTL (C++ parser) → WASM = viable product
+- Never validated that PEGTL syntax is user-friendly
+- Never compared to Peggy (JS alternative with better DX)
+- Failed to apply "Interprets DSL" rule from WASM decision tree
+
+**Why Decision Tree Failed:**
+1. **"WASM for WASM's sake"** - Focused on "can we compile it?" not "should we use it?"
+2. **Skipped syntax validation** - Assumed all PEG libraries are equivalent
+3. **Ignored JS alternatives** - Never researched Peggy/PEG.js ecosystem
+4. **No UX evaluation** - Never asked "will users actually write C++ template syntax?"
+
+**What Should Have Caught This:**
+- ❌ Existing rule: "Interprets DSL" (parser-lab IS a DSL tool!)
+- ❌ New rule: "No adequate JS alternative" (Peggy exists!)
+- ❌ Common sense: "Would I write grammars in C++ template syntax?"
+
+**Fix Applied:**
+- ✅ Added **Phase 2: User Experience Validation** to decision tree
+- ✅ Check user-facing syntax before technical feasibility
+- ✅ Compare JS alternative DX before committing to WASM
+- ✅ Ask "what does WASM enable?" before assuming it's needed
+
+### Updated Evaluation Process (3 Phases):
+
+**Phase 1: Market Validation**
 1. Search: "[problem] best tool 2026"
 2. Ask: "What makes this better than X?"
 3. Ask: "Who encounters this problem weekly?"
 4. Ask: "What's the novel contribution?"
 
-**Phase 2: Technical Feasibility**
-5. Check WASM decision tree (existing)
-6. Verify compilation feasibility
+**Phase 2: User Experience Validation (NEW - CRITICAL)**
+5. Check user-facing syntax (is it accessible?)
+6. Compare JS alternative DX (is WASM better?)
+7. Ask: "What does WASM enable that JS can't do?"
 
-### New Rule:
+**Phase 3: Technical Feasibility**
+8. Check WASM decision tree (compilation feasibility)
+9. Verify no WASM blockers (SIMD, text parsing, etc.)
 
-**"If the best answer to 'why build this?' is 'because we can,' don't build it."**
+### New Rules:
+
+1. **"If the best answer to 'why build this?' is 'because we can,' don't build it."**
+2. **"If WASM makes UX worse, don't use WASM."** (NEW)
+3. **"Always compare to best-in-class JS alternative before using WASM."** (NEW)
 
 Build things that are:
 - Novel (WASM enables something new)
 - Needed (real problem, no great solution)
 - Differentiated (not commodity)
+- **Usable (good DX, not hostile syntax)** (NEW)
 
 ---
 

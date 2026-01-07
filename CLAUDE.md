@@ -86,15 +86,42 @@ Apply these filters before any technical work:
 - [ ] **Connective tissue** - Combines existing concepts in new way (e.g., WASM + edge)
 - [ ] **Real problem** - You or target users encounter this problem regularly
 
-### Phase 2: Technical Feasibility (WASM-Specific)
+### Phase 2: User Experience Validation (CRITICAL)
 
-**Only evaluate if Phase 1 passes.**
+**Only evaluate if Phase 1 passes. Check BEFORE technical feasibility.**
+
+#### 🔴 REJECT if ANY of these are true:
+
+1. **User-facing syntax is hostile**
+   - Examples: C++ templates, assembly-like DSLs, unfamiliar notations
+   - Test: "Can a typical developer write this without extensive docs?"
+   - Why: WASM performance doesn't matter if UX is terrible
+
+2. **JS alternative has better DX**
+   - Examples: Peggy (friendly PEG syntax) vs PEGTL (C++ templates)
+   - Test: Compare example code side-by-side
+   - Why: Developer experience > raw performance for most use cases
+
+3. **WASM doesn't enable new UX**
+   - Examples: Server-side tool moved to client (but UX is same)
+   - Test: "What can users do with WASM that they couldn't do before?"
+   - Why: If WASM is just "faster," JS might be fast enough
+
+#### ✅ PROCEED if:
+
+- [ ] **User-facing interface unchanged** - WASM is internal (users don't see it)
+- [ ] **WASM enables new capability** - Browser-based, offline, real-time, etc.
+- [ ] **Syntax compatibility** - If DSL, check that WASM library uses familiar syntax
+
+### Phase 3: Technical Feasibility (WASM-Specific)
+
+**Only evaluate if Phase 1 & 2 pass.**
 
 ---
 
 ## Pre-Conversion Decision Tree
 
-**Use this AFTER market validation to evaluate WASM technical feasibility.**
+**Use this AFTER market + UX validation to evaluate WASM technical feasibility.**
 
 Based on 13 conversion experiments, apply these filters in order:
 
