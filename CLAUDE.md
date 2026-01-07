@@ -48,9 +48,53 @@ Why WASM can be slower:
 
 ---
 
+## Product Viability Framework
+
+**Apply BEFORE technical evaluation to avoid building commoditized or unnecessary products.**
+
+### Phase 1: Market Validation (CRITICAL - Check First)
+
+Apply these filters before any technical work:
+
+#### 🔴 REJECT if ANY of these are true:
+
+1. **Best-in-class solution already exists**
+   - Examples: fclones (duplicate finder), Vercel og-image (social cards)
+   - Test: Search "[problem] best tool 2026" - if mature, optimized solution exists, stop
+   - Why: You cannot compete with highly optimized, actively maintained tools
+
+2. **Commoditized market with no differentiation**
+   - Examples: Basic CLI tools (ls, grep equivalents), generic utilities
+   - Test: "What makes this better than X?" - if answer is "nothing", stop
+   - Why: Building worse versions of existing tools wastes time
+
+3. **Problem doesn't exist or is trivial**
+   - Examples: Solutions looking for problems, over-engineered simple tasks
+   - Test: "Who encounters this problem weekly?" - if answer is "nobody", stop
+   - Why: No users = no value
+
+4. **No novel angle or integration**
+   - Examples: Straight ports with no WASM benefit, feature-for-feature clones
+   - Test: "What's the novel contribution?" - if answer is "it exists", stop
+   - Why: Novelty comes from WASM enablement, new UX, or unique integrations
+
+#### ✅ PROCEED if 2+ of these are true:
+
+- [ ] **Gap in market** - No adequate solution exists or all solutions have major flaws
+- [ ] **Novel integration** - WASM enables new use case (browser-based, edge, offline-first)
+- [ ] **Unique UX** - Better workflow, better DX, or solves pain point differently
+- [ ] **Connective tissue** - Combines existing concepts in new way (e.g., WASM + edge)
+- [ ] **Real problem** - You or target users encounter this problem regularly
+
+### Phase 2: Technical Feasibility (WASM-Specific)
+
+**Only evaluate if Phase 1 passes.**
+
+---
+
 ## Pre-Conversion Decision Tree
 
-**Use this before attempting any WASM conversion to avoid wasted effort.**
+**Use this AFTER market validation to evaluate WASM technical feasibility.**
 
 Based on 13 conversion experiments, apply these filters in order:
 
